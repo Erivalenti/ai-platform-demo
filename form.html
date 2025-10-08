@@ -88,30 +88,27 @@ const steps = [
   document.getElementById('step4')
 ];
 
+// Supabase
+const supabaseUrl = 'https://geazefwmcocuotixqlyf.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlYXplZndtY29jdW90aXhxbHlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MTg3MTYsImV4cCI6MjA3NTQ5NDcxNn0.r0jfc5EITj47Hve-IuSYABfTDz4_-_5j76AYrpptf68';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
 function showStep(index){
   steps.forEach(s => s.classList.remove('active'));
   survey.classList.remove('active');
   if(index >= 0 && index < steps.length) steps[index].classList.add('active');
 }
 
-// Supabase client
-const supabaseUrl = 'https://geazefwmcocuotixqlyf.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlYXplZndtY29jdW90aXhxbHlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MTg3MTYsImV4cCI6MjA3NTQ5NDcxNn0.r0jfc5EITj47Hve-IuSYABfTDz4_-_5j76AYrpptf68';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
 // Форма сабміт → показати опитування
 form.addEventListener('submit', e => {
   e.preventDefault();
 
-  // Очищаємо номер від всього, крім цифр
   const phoneValue = phone.value.replace(/\D/g,''); 
-
   if(!/^[0-9]{9,10}$/.test(phoneValue)){
     phoneError.style.display = 'block';
     phone.focus();
     return;
   }
-
   phoneError.style.display = 'none';
 
   const tempUser = {
@@ -128,8 +125,8 @@ form.addEventListener('submit', e => {
   survey.classList.add('active');
 });
 
-// Опитування сабміт → Supabase + flow
-surveyBtn.addEventListener('click', async () => {
+// Опитування сабміт → старт flow + вставка Supabase
+surveyBtn.addEventListener('click', () => {
   if(!goal.value || !experience.value){
     alert('Seleziona tutte le opzioni!');
     return;
@@ -139,21 +136,25 @@ surveyBtn.addEventListener('click', async () => {
   userData.goal = goal.value;
   userData.experience = experience.value;
 
-  try {
-    const { data, error } = await supabase.from('users').insert([userData]);
-    if(error) console.error('Supabase error:', error);
-    else console.log('Saved to Supabase:', data);
-  } catch(err) {
-    console.error(err);
-  }
-
-  localStorage.removeItem('tempUser');
-
   survey.classList.remove('active');
-  showStep(0);
-  setTimeout(()=> showStep(1), 2000);
-  setTimeout(()=> showStep(2), 4000);
-  setTimeout(()=> showStep(3), 6000);
+  showStep(0); // step1 - loading
+
+  // Вставка в Supabase вже на кроці пошуку агента
+  (async () => {
+    try {
+      const { data, error } = await supabase.from('users').insert([userData]);
+      if(error) console.error('Supabase error:', error);
+      else console.log('Saved to Supabase:', data);
+    } catch(err) {
+      console.error(err);
+    }
+    localStorage.removeItem('tempUser');
+  })();
+
+  // Flow кроки
+  setTimeout(() => showStep(1), 2000); // Registrazione completata
+  setTimeout(() => showStep(2), 4000); // Ricerca support-manager
+  setTimeout(() => showStep(3), 6000); // Показ агента
 });
 </script>
 </body>
