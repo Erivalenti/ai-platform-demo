@@ -1,80 +1,69 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registrazione</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #141e30, #243b55);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      width: 300px;
-      background: rgba(255,255,255,0.1);
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-    input {
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      font-size: 1rem;
-    }
-    button {
-      padding: 12px;
-      border: none;
-      background: #00c6ff;
-      color: white;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    button:hover {
-      background: #0072ff;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Walton Market - Registrazione</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif;}
+  body{background:linear-gradient(135deg,#0d1117,#1a1f2b);color:white;display:flex;justify-content:center;align-items:center;height:100vh;}
+  .container{background:rgba(20,25,40,0.95);padding:50px 40px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.7);width:350px;text-align:center;}
+  .container img{height:60px;margin-bottom:30px;}
+  h2{margin-bottom:30px;}
+  input, select{width:100%;padding:12px 15px;margin-bottom:20px;border-radius:10px;border:none;font-size:1rem;}
+  input:focus, select:focus{outline:none;box-shadow:0 0 10px rgba(255,110,196,0.5);}
+  .btn{padding:15px 40px;font-size:1.2rem;color:white;background:linear-gradient(45deg,#ff6ec4,#7873f5);border:none;border-radius:50px;cursor:pointer;transition:0.3s;box-shadow:0 5px 25px rgba(0,0,0,0.6);}
+  .btn:hover{transform:scale(1.05);box-shadow:0 10px 35px rgba(0,0,0,0.8);}
+  .error{color:#ff6e6e;font-size:0.9rem;margin-top:-15px;margin-bottom:10px;display:none;text-align:left;}
+</style>
 </head>
 <body>
-  <h2>Completa la registrazione</h2>
+
+<div class="container">
+  <img src="https://back.wltnmarket.com/storage/images/logo/dark.png?0.609100662293576" alt="Walton Market Logo">
+  <h2>Registrazione</h2>
   <form id="regForm">
-    <input type="text" id="nome" placeholder="Nome" required />
-    <input type="text" id="cognome" placeholder="Cognome" required />
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="tel" id="telefono" placeholder="Numero di telefono" required />
-    <button type="submit">Avanti</button>
+    <input type="text" id="firstName" placeholder="Nome" required>
+    <input type="text" id="lastName" placeholder="Cognome" required>
+    <input type="email" id="email" placeholder="Email" required>
+
+    <select id="prefix">
+      <option value="+39" selected>+39 Italia</option>
+      <option value="+44">+44 UK</option>
+      <option value="+1">+1 USA</option>
+      <option value="+49">+49 Germania</option>
+      <option value="+33">+33 Francia</option>
+    </select>
+    <input type="tel" id="phone" placeholder="Numero di telefono" required pattern="[0-9]{9,10}">
+    <div class="error" id="phoneError">Inserisci un numero valido</div>
+
+    <button type="submit" class="btn">Registrati</button>
   </form>
+</div>
 
-  <script>
-    document.getElementById('regForm').addEventListener('submit', function(e){
-      e.preventDefault();
+<script>
+  const form = document.getElementById('regForm');
+  const phone = document.getElementById('phone');
+  const phoneError = document.getElementById('phoneError');
 
-      // (in futuro qui possiamo salvare i dati su Firebase)
-      // Per ora solo salviamo in localStorage
-      const dati = {
-        nome: document.getElementById('nome').value,
-        cognome: document.getElementById('cognome').value,
-        email: document.getElementById('email').value,
-        telefono: document.getElementById('telefono').value
-      };
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const phoneValue = phone.value.trim();
+    // Перевірка: тільки цифри, 9-10 цифр
+    const phoneRegex = /^[0-9]{9,10}$/;
+    if(!phoneRegex.test(phoneValue)){
+      phoneError.style.display='block';
+      phone.focus();
+      return false;
+    } else {
+      phoneError.style.display='none';
+    }
+    // Тут можна додати відправку даних на сервер
+    alert("Registrazione completata!");
+    form.reset();
+  });
+</script>
 
-      localStorage.setItem('userData', JSON.stringify(dati));
-
-      window.location.href = 'questions.html';
-    });
-  </script>
 </body>
 </html>
