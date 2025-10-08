@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manager</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .spinner {
+      border: 8px solid rgba(255, 255, 255, 0.2);
+      border-top: 8px solid #00c6ff;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .success, .manager-info {
+      display: none;
+    }
+    .success {
+      font-size: 2rem;
+      color: #00ff7f;
+      margin-bottom: 20px;
+    }
+    .manager-info {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 15px;
+      width: 300px;
+    }
+    .manager-info img {
+      width: 80px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="spinner"></div>
+  <div class="success">✅ Manager trovato!</div>
+
+  <div class="manager-info">
+    <img src="https://i.pravatar.cc/80" alt="Manager">
+    <h3>Nome: Erina</h3>
+    <p>Il tuo manager ti contatterà a breve.</p>
+    <p>📞 Email: erina@example.com</p>
+  </div>
+
+  <script>
+    setTimeout(() => {
+      document.querySelector('.spinner').style.display = 'none';
+      document.querySelector('.success').style.display = 'block';
+
+      setTimeout(() => {
+        document.querySelector('.success').style.display = 'none';
+        document.querySelector('.manager-info').style.display = 'block';
+      }, 2000);
+    }, 3000);
+  </script>
+</body>
+</html>
