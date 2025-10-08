@@ -8,26 +8,32 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif;}
   body{background:linear-gradient(135deg,#0d1117,#1a1f2b);color:white;display:flex;justify-content:center;align-items:center;height:100vh;}
-  .container{background:rgba(20,25,40,0.95);padding:50px 40px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.7);width:350px;text-align:center;}
-  .container img{height:60px;margin-bottom:30px;}
-  h2{margin-bottom:30px;}
-  input, select{width:100%;padding:12px 15px;margin-bottom:20px;border-radius:10px;border:none;font-size:1rem;}
+  .container{background:rgba(20,25,40,0.95);padding:40px 30px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.7);width:350px;text-align:center;position:relative;}
+  .container img{height:60px;margin-bottom:20px;}
+  h2{margin-bottom:20px;}
+  input, select{width:100%;padding:12px 15px;margin-bottom:15px;border-radius:10px;border:none;font-size:1rem;}
   input:focus, select:focus{outline:none;box-shadow:0 0 10px rgba(255,110,196,0.5);}
-  .btn{padding:15px 40px;font-size:1.2rem;color:white;background:linear-gradient(45deg,#ff6ec4,#7873f5);border:none;border-radius:50px;cursor:pointer;transition:0.3s;box-shadow:0 5px 25px rgba(0,0,0,0.6);}
+  .btn{padding:12px 30px;font-size:1.2rem;color:white;background:linear-gradient(45deg,#ff6ec4,#7873f5);border:none;border-radius:50px;cursor:pointer;transition:0.3s;box-shadow:0 5px 25px rgba(0,0,0,0.6);}
   .btn:hover{transform:scale(1.05);box-shadow:0 10px 35px rgba(0,0,0,0.8);}
-  .error{color:#ff6e6e;font-size:0.9rem;margin-top:-15px;margin-bottom:10px;display:none;text-align:left;}
+  .error{color:#ff6e6e;font-size:0.9rem;margin-top:-10px;margin-bottom:10px;display:none;text-align:left;}
+
+  .step{display:none;flex-direction:column;align-items:center;justify-content:center;}
+  .step.active{display:flex;}
+  .check{font-size:50px;color:#4ade80;margin-bottom:15px;}
+  .loading{margin-bottom:15px;font-size:1.2rem;}
 </style>
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="container">
   <img src="https://back.wltnmarket.com/storage/images/logo/dark.png?0.609100662293576" alt="Walton Market Logo">
   <h2>Registrazione</h2>
+
+  <!-- Форма -->
   <form id="regForm">
     <input type="text" id="firstName" placeholder="Nome" required>
     <input type="text" id="lastName" placeholder="Cognome" required>
     <input type="email" id="email" placeholder="Email" required>
-
     <select id="prefix">
       <option value="+39" selected>+39 Italia</option>
       <option value="+44">+44 UK</option>
@@ -40,6 +46,23 @@
 
     <button type="submit" class="btn">Registrati</button>
   </form>
+
+  <!-- Flow steps -->
+  <div class="step" id="step1">
+    <div class="loading">Caricamento...</div>
+  </div>
+  <div class="step" id="step2">
+    <div class="check">✔</div>
+    <div>Registrazione completata!</div>
+  </div>
+  <div class="step" id="step3">
+    <div class="loading">Ricerca support-manager...</div>
+  </div>
+  <div class="step" id="step4">
+    <div class="check">✔</div>
+    <div><strong>Manager:</strong> Luca Rossi<br><strong>Telefono:</strong> +39 345 678 9012</div>
+  </div>
+
 </div>
 
 <script>
@@ -47,10 +70,21 @@
   const phone = document.getElementById('phone');
   const phoneError = document.getElementById('phoneError');
 
+  const steps = [
+    document.getElementById('step1'),
+    document.getElementById('step2'),
+    document.getElementById('step3'),
+    document.getElementById('step4')
+  ];
+
+  function showStep(index){
+    steps.forEach(s=>s.classList.remove('active'));
+    if(index>=0 && index<steps.length) steps[index].classList.add('active');
+  }
+
   form.addEventListener('submit', function(e){
     e.preventDefault();
     const phoneValue = phone.value.trim();
-    // Перевірка: тільки цифри, 9-10 цифр
     const phoneRegex = /^[0-9]{9,10}$/;
     if(!phoneRegex.test(phoneValue)){
       phoneError.style.display='block';
@@ -59,9 +93,15 @@
     } else {
       phoneError.style.display='none';
     }
-    // Тут можна додати відправку даних на сервер
-    alert("Registrazione completata!");
-    form.reset();
+
+    // Ховаємо форму
+    form.style.display='none';
+
+    // Послідовність steps
+    showStep(0);
+    setTimeout(()=>{ showStep(1); }, 2000); // 2s loading → registrazione completata
+    setTimeout(()=>{ showStep(2); }, 4000); // 2s галочка → ricerca manager
+    setTimeout(()=>{ showStep(3); }, 6000); // 2s loading → менеджер
   });
 </script>
 
