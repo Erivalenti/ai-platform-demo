@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrazione</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 300px;
+      background: rgba(255,255,255,0.1);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
+    button {
+      padding: 12px;
+      border: none;
+      background: #00c6ff;
+      color: white;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #0072ff;
+    }
+  </style>
+</head>
+<body>
+  <h2>Completa la registrazione</h2>
+  <form id="regForm">
+    <input type="text" id="nome" placeholder="Nome" required />
+    <input type="text" id="cognome" placeholder="Cognome" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="tel" id="telefono" placeholder="Numero di telefono" required />
+    <button type="submit">Avanti</button>
+  </form>
+
+  <script>
+    document.getElementById('regForm').addEventListener('submit', function(e){
+      e.preventDefault();
+
+      // (in futuro qui possiamo salvare i dati su Firebase)
+      // Per ora solo salviamo in localStorage
+      const dati = {
+        nome: document.getElementById('nome').value,
+        cognome: document.getElementById('cognome').value,
+        email: document.getElementById('email').value,
+        telefono: document.getElementById('telefono').value
+      };
+
+      localStorage.setItem('userData', JSON.stringify(dati));
+
+      window.location.href = 'questions.html';
+    });
+  </script>
+</body>
+</html>
