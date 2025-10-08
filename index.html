@@ -19,6 +19,7 @@
   p{font-size:1.3rem;margin-bottom:30px;max-width:700px;text-shadow:1px 1px 8px rgba(0,0,0,0.6);}
   .btn{padding:15px 40px;font-size:1.3rem;color:white;background:linear-gradient(45deg,#ff6ec4,#7873f5);border:none;border-radius:50px;cursor:pointer;transition:0.3s;box-shadow:0 5px 25px rgba(0,0,0,0.6);}
   .btn:hover{transform:scale(1.1);box-shadow:0 10px 35px rgba(0,0,0,0.8);}
+  #slideBtn{position:absolute;bottom:50px;left:50%;transform:translateX(-50%);z-index:100;}
 
   canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;}
 
@@ -53,10 +54,10 @@
     <h1>Inizia ora</h1>
     <p>Crea il tuo account in pochi minuti e comincia a investire con AI oggi stesso.</p>
   </div>
-
-  <!-- Кнопка завжди тут -->
-  <button class="btn" id="slideBtn">Avanti</button>
 </div>
+
+<!-- Кнопка завжди тут -->
+<button class="btn" id="slideBtn">Avanti</button>
 
 <script>
   const slides = document.querySelectorAll('.slide');
