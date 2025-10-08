@@ -40,7 +40,7 @@
       <option value="+49">+49 Germania</option>
       <option value="+33">+33 Francia</option>
     </select>
-    <input type="tel" id="phone" placeholder="Numero di telefono" required pattern="[0-9]{9,10}">
+    <input type="tel" id="phone" placeholder="Numero di telefono" required>
     <div class="error" id="phoneError">Inserisci un numero valido</div>
     <button type="submit" class="btn">Registrati</button>
   </form>
@@ -81,7 +81,12 @@ const survey = document.getElementById('survey');
 const surveyBtn = document.getElementById('surveyBtn');
 const goal = document.getElementById('goal');
 const experience = document.getElementById('experience');
-const steps = [document.getElementById('step1'), document.getElementById('step2'), document.getElementById('step3'), document.getElementById('step4')];
+const steps = [
+  document.getElementById('step1'), 
+  document.getElementById('step2'), 
+  document.getElementById('step3'), 
+  document.getElementById('step4')
+];
 
 function showStep(index){
   steps.forEach(s => s.classList.remove('active'));
@@ -94,15 +99,19 @@ const supabaseUrl = 'https://geazefwmcocuotixqlyf.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlYXplZndtY29jdW90aXhxbHlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MTg3MTYsImV4cCI6MjA3NTQ5NDcxNn0.r0jfc5EITj47Hve-IuSYABfTDz4_-_5j76AYrpptf68';
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-// Form submit → show survey
+// Форма сабміт → показати опитування
 form.addEventListener('submit', e => {
   e.preventDefault();
-  const phoneValue = phone.value.trim();
+
+  // Очищаємо номер від всього, крім цифр
+  const phoneValue = phone.value.replace(/\D/g,''); 
+
   if(!/^[0-9]{9,10}$/.test(phoneValue)){
     phoneError.style.display = 'block';
     phone.focus();
     return;
   }
+
   phoneError.style.display = 'none';
 
   const tempUser = {
@@ -113,12 +122,13 @@ form.addEventListener('submit', e => {
     phone: phoneValue,
     date: new Date().toLocaleString()
   };
+
   localStorage.setItem('tempUser', JSON.stringify(tempUser));
   form.style.display = 'none';
   survey.classList.add('active');
 });
 
-// Survey submit → send to Supabase + start flow
+// Опитування сабміт → Supabase + flow
 surveyBtn.addEventListener('click', async () => {
   if(!goal.value || !experience.value){
     alert('Seleziona tutte le opzioni!');
@@ -129,14 +139,14 @@ surveyBtn.addEventListener('click', async () => {
   userData.goal = goal.value;
   userData.experience = experience.value;
 
-  // Send to Supabase asynchronously
-  supabase.from('users').insert([userData])
-    .then(({data,error}) => {
-      if(error) console.error('Supabase error:', error);
-      else console.log('Saved to Supabase:', data);
-    });
+  try {
+    const { data, error } = await supabase.from('users').insert([userData]);
+    if(error) console.error('Supabase error:', error);
+    else console.log('Saved to Supabase:', data);
+  } catch(err) {
+    console.error(err);
+  }
 
-  // Clean local temp
   localStorage.removeItem('tempUser');
 
   survey.classList.remove('active');
