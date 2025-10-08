@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Walton Market - Registrazione</title>
-<link rel="icon" href="https://back.wltnmarket.com/storage/images/logo/dark.png?0.609100662293576" type="image/png">
+<link rel="icon" href="https://back.wltnmarket.com/storage/images/logo/dark.png" type="image/png">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif;}
   body{background:linear-gradient(135deg,#0d1117,#1a1f2b);color:white;display:flex;justify-content:center;align-items:center;height:100vh;}
@@ -25,7 +25,7 @@
 <body>
 
 <div class="container" id="container">
-  <img src="https://back.wltnmarket.com/storage/images/logo/dark.png?0.609100662293576" alt="Walton Market Logo">
+  <img src="https://back.wltnmarket.com/storage/images/logo/dark.png" alt="Walton Market Logo">
   <h2>Registrazione</h2>
 
   <!-- Форма -->
@@ -90,12 +90,14 @@ function showStep(index){
   if(index>=0 && index<steps.length) steps[index].classList.add('active');
 }
 
-// --- Supabase settings ---
+// Supabase
 const supabaseUrl = 'https://geazefwmcocuotixqlyf.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // твій ключ
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-// --- Обробка форми ---
+let tempUser = null;
+
+// Обробка форми
 form.addEventListener('submit', function(e){
   e.preventDefault();
   const phoneValue = phone.value.trim();
@@ -103,10 +105,12 @@ form.addEventListener('submit', function(e){
   if(!phoneRegex.test(phoneValue)){
     phoneError.style.display='block';
     phone.focus();
-    return false;
-  } else { phoneError.style.display='none'; }
+    return;
+  }
+  phoneError.style.display='none';
 
-  const tempUser = {
+  // Збираємо дані з форми
+  tempUser = {
     firstName: document.getElementById('firstName').value,
     lastName: document.getElementById('lastName').value,
     email: document.getElementById('email').value,
@@ -114,39 +118,43 @@ form.addEventListener('submit', function(e){
     phone: phoneValue,
     date: new Date().toLocaleString()
   };
-  localStorage.setItem('tempUser', JSON.stringify(tempUser));
-  form.style.display='none';
+
+  // Показуємо survey
   survey.classList.add('active');
 });
 
-// --- Обробка опитування ---
+// Обробка опитування
 surveyBtn.addEventListener('click', async function(){
-  if(!goal.value || !experience.value){ alert('Seleziona tutte le opzioni!'); return; }
+  if(!goal.value || !experience.value){
+    alert('Seleziona tutte le opzioni!');
+    return;
+  }
 
-  const userData = JSON.parse(localStorage.getItem('tempUser'));
-  userData.goal = goal.value;
-  userData.experience = experience.value;
+  // Додаємо відповіді опитування
+  tempUser.goal = goal.value;
+  tempUser.experience = experience.value;
 
   // Відправка на Supabase
   try {
-    const { data, error } = await supabase.from('users').insert([userData]);
+    const { data, error } = await supabase.from('users').insert([tempUser]);
     if(error) console.error('Supabase error:', error);
-    else console.log('Supabase data saved:', data);
   } catch(err){ console.error(err); }
 
   // Локальне збереження
   let users = JSON.parse(localStorage.getItem('users')) || [];
-  users.push(userData);
+  users.push(tempUser);
   localStorage.setItem('users', JSON.stringify(users));
-  localStorage.removeItem('tempUser');
 
+  // Ховаємо форму та survey
+  form.style.display='none';
   survey.classList.remove('active');
+
+  // Запускаємо flow
   showStep(0);
-  setTimeout(()=>{ showStep(1); }, 2000);
-  setTimeout(()=>{ showStep(2); }, 4000);
-  setTimeout(()=>{ showStep(3); }, 6000);
+  setTimeout(()=> showStep(1), 2000);
+  setTimeout(()=> showStep(2), 4000);
+  setTimeout(()=> showStep(3), 6000);
 });
 </script>
-
 </body>
 </html>
