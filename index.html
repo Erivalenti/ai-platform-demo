@@ -53,17 +53,15 @@
     <h1>Inizia ora</h1>
     <p>Crea il tuo account in pochi minuti e comincia a investire con AI oggi stesso.</p>
   </div>
+
+  <!-- Кнопка завжди тут -->
+  <button class="btn" id="slideBtn">Avanti</button>
 </div>
 
 <script>
   const slides = document.querySelectorAll('.slide');
-  const slider = document.getElementById('slider');
+  const btn = document.getElementById('slideBtn');
   let current = 0;
-
-  // Створимо кнопку динамічно
-  const btn = document.createElement('button');
-  btn.className = 'btn';
-  slider.appendChild(btn);
 
   function updateButton(){
     if(current < slides.length - 1){
