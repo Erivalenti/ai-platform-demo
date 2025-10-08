@@ -1,3 +1,77 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Walton Market - Registrazione</title>
+<link rel="icon" href="https://back.wltnmarket.com/storage/images/logo/dark.png" type="image/png">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif;}
+  body{background:linear-gradient(135deg,#0d1117,#1a1f2b);color:white;display:flex;justify-content:center;align-items:center;height:100vh;}
+  .container{background:rgba(20,25,40,0.95);padding:40px 30px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.7);width:350px;text-align:center;}
+  .container img{height:60px;margin-bottom:20px;}
+  h2{margin-bottom:20px;}
+  input, select{width:100%;padding:12px 15px;margin-bottom:15px;border-radius:10px;border:none;font-size:1rem;}
+  input:focus, select:focus{outline:none;box-shadow:0 0 10px rgba(255,110,196,0.5);}
+  .btn{padding:12px 30px;font-size:1.2rem;color:white;background:linear-gradient(45deg,#ff6ec4,#7873f5);border:none;border-radius:50px;cursor:pointer;transition:0.3s;box-shadow:0 5px 25px rgba(0,0,0,0.6);}
+  .btn:hover{transform:scale(1.05);box-shadow:0 10px 35px rgba(0,0,0,0.8);}
+  .error{color:#ff6e6e;font-size:0.9rem;margin-top:-10px;margin-bottom:10px;display:none;text-align:left;}
+  .step{display:none;flex-direction:column;align-items:center;justify-content:center;}
+  .step.active{display:flex;}
+  .check{font-size:50px;color:#4ade80;margin-bottom:15px;}
+  .loading{margin-bottom:15px;font-size:1.2rem;}
+</style>
+</head>
+<body>
+
+<div class="container" id="container">
+  <img src="https://back.wltnmarket.com/storage/images/logo/dark.png" alt="Walton Market Logo">
+  <h2>Registrazione</h2>
+
+  <!-- Форма -->
+  <form id="regForm">
+    <input type="text" id="firstName" placeholder="Nome" required>
+    <input type="text" id="lastName" placeholder="Cognome" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <select id="prefix">
+      <option value="+39" selected>+39 Italia</option>
+      <option value="+44">+44 UK</option>
+      <option value="+1">+1 USA</option>
+      <option value="+49">+49 Germania</option>
+      <option value="+33">+33 Francia</option>
+    </select>
+    <input type="tel" id="phone" placeholder="Numero di telefono" required pattern="[0-9]{9,10}">
+    <div class="error" id="phoneError">Inserisci un numero valido</div>
+    <button type="submit" class="btn">Registrati</button>
+  </form>
+
+  <!-- Опитування -->
+  <div class="step" id="survey">
+    <h2>Piccolo sondaggio</h2>
+    <p>Qual è il tuo obiettivo principale con Walton Market?</p>
+    <select id="goal" required>
+      <option value="" disabled selected>Seleziona un'opzione</option>
+      <option value="profitto">Profitto rapido</option>
+      <option value="investimento">Investimento a lungo termine</option>
+      <option value="apprendimento">Imparare trading</option>
+    </select>
+    <p>Hai già esperienza di trading?</p>
+    <select id="experience" required>
+      <option value="" disabled selected>Seleziona un'opzione</option>
+      <option value="nessuna">Nessuna</option>
+      <option value="base">Base</option>
+      <option value="avanzata">Avanzata</option>
+    </select>
+    <button class="btn" id="surveyBtn">Avanti</button>
+  </div>
+
+  <!-- Flow steps -->
+  <div class="step" id="step1"><div class="loading">Caricamento...</div></div>
+  <div class="step" id="step2"><div class="check">✔</div><div>Registrazione completata!</div></div>
+  <div class="step" id="step3"><div class="loading">Ricerca support-manager...</div></div>
+  <div class="step" id="step4"><div class="check">✔</div><div><strong>Manager:</strong> Erica Valenti<br><strong>Whatsapp:</strong> +34 676 70 61 00<br><strong>Email:</strong> erica.valenti@waltonmarketltd.email</div></div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 <script>
 const form = document.getElementById('regForm');
@@ -7,13 +81,7 @@ const survey = document.getElementById('survey');
 const surveyBtn = document.getElementById('surveyBtn');
 const goal = document.getElementById('goal');
 const experience = document.getElementById('experience');
-
-const steps = [
-  document.getElementById('step1'),
-  document.getElementById('step2'),
-  document.getElementById('step3'),
-  document.getElementById('step4')
-];
+const steps = [document.getElementById('step1'), document.getElementById('step2'), document.getElementById('step3'), document.getElementById('step4')];
 
 function showStep(index){
   steps.forEach(s => s.classList.remove('active'));
@@ -21,24 +89,21 @@ function showStep(index){
   if(index >= 0 && index < steps.length) steps[index].classList.add('active');
 }
 
-// --- Supabase setup ---
+// Supabase client
 const supabaseUrl = 'https://geazefwmcocuotixqlyf.supabase.co';
-const supabaseKey = 'твій-ключ-supabase';
+const supabaseKey = 'YOUR_SUPABASE_KEY';
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-// --- Submit форми ---
-form.addEventListener('submit', function(e){
+// Form submit → show survey
+form.addEventListener('submit', e => {
   e.preventDefault();
   const phoneValue = phone.value.trim();
-  const phoneRegex = /^[0-9]{9,10}$/;
-
-  if(!phoneRegex.test(phoneValue)){
+  if(!/^[0-9]{9,10}$/.test(phoneValue)){
     phoneError.style.display = 'block';
     phone.focus();
-    return false;
-  } else {
-    phoneError.style.display = 'none';
+    return;
   }
+  phoneError.style.display = 'none';
 
   const tempUser = {
     firstName: document.getElementById('firstName').value,
@@ -48,14 +113,13 @@ form.addEventListener('submit', function(e){
     phone: phoneValue,
     date: new Date().toLocaleString()
   };
-
   localStorage.setItem('tempUser', JSON.stringify(tempUser));
   form.style.display = 'none';
   survey.classList.add('active');
 });
 
-// --- Submit survey ---
-surveyBtn.addEventListener('click', async function(){
+// Survey submit → send to Supabase + start flow
+surveyBtn.addEventListener('click', async () => {
   if(!goal.value || !experience.value){
     alert('Seleziona tutte le opzioni!');
     return;
@@ -65,31 +129,22 @@ surveyBtn.addEventListener('click', async function(){
   userData.goal = goal.value;
   userData.experience = experience.value;
 
-  // --- Відправка на Supabase ---
-  try {
-    const { data, error } = await supabase.from('users').insert([userData]);
-    if(error){
-      console.error('Supabase error:', error);
-      alert('Si è verificato un errore durante l\'invio dei dati.');
-    } else {
-      console.log('Supabase data saved:', data);
-    }
-  } catch(err){
-    console.error(err);
-    alert('Errore di rete.');
-  }
+  // Send to Supabase asynchronously
+  supabase.from('users').insert([userData])
+    .then(({data,error}) => {
+      if(error) console.error('Supabase error:', error);
+      else console.log('Saved to Supabase:', data);
+    });
 
-  // --- Локальне збереження ---
-  let users = JSON.parse(localStorage.getItem('users')) || [];
-  users.push(userData);
-  localStorage.setItem('users', JSON.stringify(users));
+  // Clean local temp
   localStorage.removeItem('tempUser');
 
-  // --- Показуємо flow ---
   survey.classList.remove('active');
   showStep(0);
-  setTimeout(()=>{ showStep(1); }, 2000);
-  setTimeout(()=>{ showStep(2); }, 4000);
-  setTimeout(()=>{ showStep(3); }, 6000);
+  setTimeout(()=> showStep(1), 2000);
+  setTimeout(()=> showStep(2), 4000);
+  setTimeout(()=> showStep(3), 6000);
 });
 </script>
+</body>
+</html>
