@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: white;
+      padding: 20px;
+    }
+    input[type="password"] {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      background: #00c6ff;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #fff;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <h2>Admin Panel</h2>
+  <div id="loginDiv">
+    <input type="password" id="adminPass" placeholder="Inserisci la password">
+    <button onclick="checkPassword()">Accedi</button>
+  </div>
+
+  <div id="adminContent" style="display:none;">
+    <h3>Dati utenti</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Cognome</th>
+          <th>Email</th>
+          <th>Telefono</th>
+          <th>Obiettivo</th>
+          <th>Esperienza</th>
+          <th>Budget</th>
+        </tr>
+      </thead>
+      <tbody id="Admineri20200"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const PASSWORD = "Admin2025"; // Cambia la password
+
+    function checkPassword() {
+      const input = document.getElementById('adminPass').value;
+      if(input === PASSWORD){
+        document.getElementById('loginDiv').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+        loadData();
+      } else {
+        alert("Password errata!");
+      }
+    }
+
+    function loadData() {
+      // Carichiamo i dati dal localStorage
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      const userAnswers = JSON.parse(localStorage.getItem('userAnswers') || '{}');
+
+      const tbody = document.getElementById('userTable');
+      tbody.innerHTML = "";
+
+      if(Object.keys(userData).length > 0){
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${userData.nome}</td>
+          <td>${userData.cognome}</td>
+          <td>${userData.email}</td>
+          <td>${userData.telefono}</td>
+          <td>${userAnswers.goal || ''}</td>
+          <td>${userAnswers.exp || ''}</td>
+          <td>${userAnswers.budget || ''}</td>
+        `;
+        tbody.appendChild(row);
+      }
+    }
+  </script>
+</body>
+</html>
