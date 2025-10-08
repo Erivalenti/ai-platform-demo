@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Walton Market - Admin</title>
-<link rel="icon" href="https://back.wltnmarket.com/storage/images/logo/dark.png?0.609100662293576" type="image/png"><style>
+<link rel="icon" href="https://back.wltnmarket.com/storage/images/logo/dark.png?0.609100662293576" type="image/png">
+<style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif;}
   body{background:linear-gradient(135deg,#0d1117,#1a1f2b);color:white;min-height:100vh;padding:20px;}
   header{display:flex;align-items:center;margin-bottom:20px;}
@@ -58,6 +59,7 @@
   </table>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const loginForm = document.getElementById('loginForm');
   const loginDiv = document.getElementById('loginDiv');
@@ -67,7 +69,12 @@
   const ADMIN_LOGIN = 'admin138';
   const ADMIN_PASSWORD = 'admin2025';
 
-  loginForm.addEventListener('submit', function(e){
+  // Supabase client
+  const supabaseUrl = 'https://geazefwmcocuotixqlyf.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlYXplZndtY29jdW90aXhxbHlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MTg3MTYsImV4cCI6MjA3NTQ5NDcxNn0.r0jfc5EITj47Hve-IuSYABfTDz4_-_5j76AYrpptf68';
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+  loginForm.addEventListener('submit', async function(e){
     e.preventDefault();
     const loginValue = document.getElementById('login').value;
     const passwordValue = document.getElementById('password').value;
@@ -75,15 +82,27 @@
     if(loginValue === ADMIN_LOGIN && passwordValue === ADMIN_PASSWORD){
       loginDiv.style.display='none';
       adminTable.style.display='block';
-      loadUsers();
+      await loadUsers();
     } else {
       alert('Login o password errati!');
     }
   });
 
-  function loadUsers(){
-    const users = JSON.parse(localStorage.getItem('users')) || [];
+  async function loadUsers(){
+    const { data: users, error } = await supabase.from('users').select('*').order('date', { ascending: false });
     userTable.innerHTML = '';
+    if(error){
+      console.error('Supabase error:', error);
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = 8;
+      td.textContent = 'Errore nel caricamento dati';
+      td.style.textAlign = 'center';
+      tr.appendChild(td);
+      userTable.appendChild(tr);
+      return;
+    }
+
     if(users.length === 0){
       const tr = document.createElement('tr');
       const td = document.createElement('td');
