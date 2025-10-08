@@ -47,6 +47,26 @@
     <button type="submit" class="btn">Registrati</button>
   </form>
 
+  <!-- Опитування -->
+  <div class="step" id="survey">
+    <h2>Piccolo sondaggio</h2>
+    <p>Qual è il tuo obiettivo principale con Walton Market?</p>
+    <select id="goal" required>
+      <option value="" disabled selected>Seleziona un'opzione</option>
+      <option value="profitto">Profitto rapido</option>
+      <option value="investimento">Investimento a lungo termine</option>
+      <option value="apprendimento">Imparare trading</option>
+    </select>
+    <p>Hai già esperienza di trading?</p>
+    <select id="experience" required>
+      <option value="" disabled selected>Seleziona un'opzione</option>
+      <option value="nessuna">Nessuna</option>
+      <option value="base">Base</option>
+      <option value="avanzata">Avanzata</option>
+    </select>
+    <button class="btn" id="surveyBtn">Avanti</button>
+  </div>
+
   <!-- Flow steps -->
   <div class="step" id="step1">
     <div class="loading">Caricamento...</div>
@@ -70,6 +90,11 @@
   const phone = document.getElementById('phone');
   const phoneError = document.getElementById('phoneError');
 
+  const survey = document.getElementById('survey');
+  const surveyBtn = document.getElementById('surveyBtn');
+  const goal = document.getElementById('goal');
+  const experience = document.getElementById('experience');
+
   const steps = [
     document.getElementById('step1'),
     document.getElementById('step2'),
@@ -79,6 +104,7 @@
 
   function showStep(index){
     steps.forEach(s=>s.classList.remove('active'));
+    survey.classList.remove('active');
     if(index>=0 && index<steps.length) steps[index].classList.add('active');
   }
 
@@ -94,27 +120,47 @@
       phoneError.style.display='none';
     }
 
-  // === Вставляєш сюди блок для localStorage ===
-  const user = {
-    firstName: document.getElementById('firstName').value,
-    lastName: document.getElementById('lastName').value,
-    email: document.getElementById('email').value,
-    prefix: document.getElementById('prefix').value,
-    phone: phone.value.trim(),
-    date: new Date().toLocaleString()
-  };
-  let users = JSON.parse(localStorage.getItem('users')) || [];
-  users.push(user);
-  localStorage.setItem('users', JSON.stringify(users));
+    // Збереження даних форми в localStorage
+    const userFormData = {
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      email: document.getElementById('email').value,
+      prefix: document.getElementById('prefix').value,
+      phone: phoneValue,
+      date: new Date().toLocaleString()
+    };
+    localStorage.setItem('tempUser', JSON.stringify(userFormData));
 
-  // Ховаємо форму
+    // Ховаємо форму та показуємо опитування
     form.style.display='none';
+    survey.classList.add('active');
+  });
 
-    // Послідовність steps
+  surveyBtn.addEventListener('click', function(){
+    if(!goal.value || !experience.value){
+      alert('Seleziona tutte le opzioni!');
+      return;
+    }
+
+    // Додаємо відповіді опитування до даних
+    const userData = JSON.parse(localStorage.getItem('tempUser'));
+    userData.goal = goal.value;
+    userData.experience = experience.value;
+
+    // Зберігаємо остаточно в масив all users
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    users.push(userData);
+    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.removeItem('tempUser');
+
+    // Ховаємо опитування
+    survey.classList.remove('active');
+
+    // Починаємо flow
     showStep(0);
-    setTimeout(()=>{ showStep(1); }, 2000); // 2s loading → registrazione completata
-    setTimeout(()=>{ showStep(2); }, 4000); // 2s галочка → ricerca manager
-    setTimeout(()=>{ showStep(3); }, 6000); // 2s loading → менеджер
+    setTimeout(()=>{ showStep(1); }, 2000);
+    setTimeout(()=>{ showStep(2); }, 4000);
+    setTimeout(()=>{ showStep(3); }, 6000);
   });
 </script>
 
