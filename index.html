@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piattaforma AI</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .slide {
+      display: none;
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+    }
+    .slide.active {
+      display: block;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.2rem;
+      opacity: 0.85;
+    }
+    button {
+      margin-top: 2rem;
+      padding: 12px 25px;
+      font-size: 1rem;
+      background: #00c6ff;
+      border: none;
+      border-radius: 12px;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #0072ff;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="slide active">
+    <h1>🚀 Piattaforma AI innovativa</h1>
+    <p>Investimenti intelligenti supportati dall’intelligenza artificiale.</p>
+  </div>
+  <div class="slide">
+    <h1>💸 Guadagno passivo</h1>
+    <p>L’AI analizza il mercato per aiutarti a guadagnare di più.</p>
+  </div>
+  <div class="slide">
+    <h1>🤝 Inizia facilmente</h1>
+    <p>La registrazione richiede meno di 2 minuti — prova subito!</p>
+  </div>
+  <button id="nextBtn">Continua</button>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const btn = document.getElementById('nextBtn');
+    let index = 0;
+
+    btn.addEventListener('click', () => {
+      slides[index].classList.remove('active');
+      index++;
+      if (index < slides.length) {
+        slides[index].classList.add('active');
+      } else {
+        window.location.href = 'form.html';
+      }
+    });
+  </script>
+</body>
+</html>
