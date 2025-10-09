@@ -1,6 +1,19 @@
+# 🔒 Environment files (не пушити ключі в GitHub)
 .env
-env.js
-/node_modules
-/dist
-.DS_Store
 .env.local
+env.js
+
+# 📦 Node dependencies і білди
+/node_modules
+/.vercel
+/dist
+/.next
+/out
+
+# 🧹 Системні файли
+.DS_Store
+Thumbs.db
+
+# ⚙️ IDE / Editor
+.vscode
+.idea
