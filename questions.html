@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Domande</title>
+  
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h2>Rispondi a qualche domanda</h2>
+
+  <form id="quizForm">
+    <div class="question">
+      <p><strong>1️⃣ Qual è il tuo obiettivo principale?</strong></p>
+      <label><input type="radio" name="goal" value="Risparmio a lungo termine" required> Risparmio a lungo termine</label>
+      <label><input type="radio" name="goal" value="Guadagno rapido"> Guadagno rapido</label>
+      <label><input type="radio" name="goal" value="Diversificare i miei investimenti"> Diversificare i miei investimenti</label>
+    </div>
+
+    <div class="question">
+      <p><strong>2️⃣ Hai già esperienza negli investimenti?</strong></p>
+      <label><input type="radio" name="exp" value="Sì"> Sì</label>
+      <label><input type="radio" name="exp" value="No"> No</label>
+    </div>
+
+    <div class="question">
+      <p><strong>3️⃣ Quanto sei disposto a investire inizialmente?</strong></p>
+      <label><input type="radio" name="budget" value="Fino a 500€"> Fino a 500€</label>
+      <label><input type="radio" name="budget" value="500€ - 2000€"> 500€ - 2000€</label>
+      <label><input type="radio" name="budget" value="Oltre 2000€"> Oltre 2000€</label>
+    </div>
+
+    <button type="submit">Continua</button>
+  </form>
+
+  
+
+
+<script src="js/supabaseClient.js"></script>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+<script src="js/env.example.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

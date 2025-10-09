@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Walton Market - Registrazione</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="container" id="container">
+  <img src="https://back.wltnmarket.com/storage/images/logo/dark.png" alt="Walton Market Logo">
+  <h2>Registrazione</h2>
+
+  <form id="regForm">
+    <input type="text" id="firstName" placeholder="Nome" required>
+    <input type="text" id="lastName" placeholder="Cognome" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <select id="prefix">
+      <option value="+39" selected>+39 Italia</option>
+      <option value="+44">+44 UK</option>
+      <option value="+1">+1 USA</option>
+      <option value="+49">+49 Germania</option>
+      <option value="+33">+33 Francia</option>
+    </select>
+    <input type="tel" id="phone" placeholder="Numero di telefono" required pattern="[0-9]{9,10}">
+    <div class="error" id="phoneError">Inserisci un numero valido</div>
+    <button type="submit" class="btn">Registrati</button>
+  </form>
+
+  <div class="step" id="survey">
+    <h2>Piccolo sondaggio</h2>
+    <p>Qual è il tuo obiettivo principale con Walton Market?</p>
+    <select id="goal" required>
+      <option value="" disabled selected>Seleziona un'opzione</option>
+      <option value="profitto">Profitto rapido</option>
+      <option value="investimento">Investimento a lungo termine</option>
+      <option value="apprendimento">Imparare trading</option>
+    </select>
+    <p>Hai già esperienza di trading?</p>
+    <select id="experience" required>
+      <option value="" disabled selected>Seleziona un'opzione</option>
+      <option value="nessuna">Nessuna</option>
+      <option value="base">Base</option>
+      <option value="avanzata">Avanzata</option>
+    </select>
+    <button class="btn" id="surveyBtn">Avanti</button>
+  </div>
+
+  <div class="step" id="step1"><div class="loading">Caricamento...</div></div>
+  <div class="step" id="step2"><div class="check">✔</div><div>Registrazione completata!</div></div>
+  <div class="step" id="step3"><div class="loading">Ricerca support-manager...</div></div>
+  <div class="step" id="step4"><div class="check">✔</div><div><strong>Manager:</strong> Erica Valenti<br><strong>Whatsapp:</strong> +34 676 70 61 00<br><strong>Email:</strong> erica.valenti@waltonmarketltd.email</div></div>
+</div>
+
+
+
+
+
+<script src="js/supabaseClient.js"></script>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+<script src="js/env.example.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
