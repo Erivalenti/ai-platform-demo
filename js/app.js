@@ -127,13 +127,26 @@ document.addEventListener("DOMContentLoaded", () => {
       userData.experience = experience.value;
 
       try {
-        const { error } = await supabase.from("users").insert([userData]);
-        if (error) throw error;
-      } catch (err) {
-        console.error("❌ Supabase error:", err);
-        alert("Errore durante il salvataggio. Riprova.");
-        return;
-      }
+  const { error } = await supabase.from("users").insert([
+    {
+      first_name: userData.firstName,
+      last_name: userData.lastName,
+      email: userData.email,
+      prefix: userData.prefix,
+      phone: userData.phone,
+      goal: userData.goal,
+      experience: userData.experience,
+      date: userData.date
+    }
+  ]);
+
+  if (error) throw error;
+} catch (err) {
+  console.error("❌ Supabase error:", err);
+  alert("Errore durante il salvataggio. Riprova.");
+  return;
+}
+
 
       survey.classList.remove("active");
       showStep(0);
