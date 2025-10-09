@@ -106,11 +106,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       userData = {
         first_name: document.getElementById("firstName").value,
-        last_name: document.getElementById("lastName").value,
-        email: document.getElementById("email").value,
-        prefix: document.getElementById("prefix").value,
-        phone: phoneValue,
-        date: new Date().toLocaleString(),
+  last_name: document.getElementById("lastName").value,
+  email: document.getElementById("email").value,
+  prefix: document.getElementById("prefix").value,
+  phone: phoneValue,
+  goal: null,
+  experience: null,
+  date: new Date().toLocaleString(),
       };
 
       form.style.display = "none";
