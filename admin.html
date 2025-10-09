@@ -14,7 +14,7 @@
   <h1>Admin Panel</h1>
 </header>
 
-<!-- Login -->
+<!-- 🔐 Login -->
 <div id="loginDiv">
   <form id="loginForm">
     <input type="text" id="login" placeholder="Login" required>
@@ -23,7 +23,7 @@
   </form>
 </div>
 
-<!-- Users table -->
+<!-- 📋 Users table -->
 <div id="adminTable" style="display:none;">
   <table>
     <thead>
@@ -39,16 +39,84 @@
       </tr>
     </thead>
     <tbody id="userTable">
-      <!-- Users data will be inserted here -->
+      <!-- Users will appear here -->
     </tbody>
   </table>
 </div>
 
-<!-- 🔧 Supabase integration -->
+<!-- ✅ Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
 <script src="js/env.js"></script>
-<script src="js/supabaseClient.js"></script>
-<script src="js/app.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    console.log("Admin panel loaded");
+
+    const ADMIN_LOGIN = "admin138";
+    const ADMIN_PASSWORD = "admin2025";
+
+    // ✅ Підключення до Supabase через env.js
+    if (!window.__env) {
+      console.error("window.__env not found. Please create js/env.js from js/env.example.js");
+      return;
+    }
+
+    const supabaseUrl = window.__env.SUPABASE_URL;
+    const supabaseAnonKey = window.__env.SUPABASE_ANON_KEY;
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+    const loginForm = document.getElementById("loginForm");
+    const loginDiv = document.getElementById("loginDiv");
+    const adminTable = document.getElementById("adminTable");
+    const userTable = document.getElementById("userTable");
+
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const login = document.getElementById("login").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (login === ADMIN_LOGIN && password === ADMIN_PASSWORD) {
+        loginDiv.style.display = "none";
+        adminTable.style.display = "block";
+        await loadUsers();
+      } else {
+        alert("❌ Invalid login or password!");
+      }
+    });
+
+    async function loadUsers() {
+      userTable.innerHTML = "";
+
+      const { data: users, error } = await supabase.from("users").select("*");
+
+      if (error) {
+        console.error("Supabase error:", error);
+        userTable.innerHTML = `<tr><td colspan="8" style="text-align:center;">Error loading users</td></tr>`;
+        return;
+      }
+
+      if (!users || users.length === 0) {
+        userTable.innerHTML = `<tr><td colspan="8" style="text-align:center;">No users found</td></tr>`;
+        return;
+      }
+
+      users.forEach((user) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${user.firstName || ""}</td>
+          <td>${user.lastName || ""}</td>
+          <td>${user.email || ""}</td>
+          <td>${user.prefix || ""}</td>
+          <td>${user.phone || ""}</td>
+          <td>${user.goal || ""}</td>
+          <td>${user.experience || ""}</td>
+          <td>${user.date || ""}</td>
+        `;
+        userTable.appendChild(tr);
+      });
+    }
+  });
+</script>
 
 </body>
 </html>
