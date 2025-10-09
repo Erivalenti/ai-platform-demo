@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Walton Market</title>
+<link rel="icon" href="https://back.wltnmarket.com/storage/images/logo/dark.png?0.609100662293576" type="image/png"><style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif;}
+  body,html{height:100%;overflow:hidden;background:#0d1117;color:white;}
+  header{position:absolute;top:20px;left:50%;transform:translateX(-50%);z-index:10;}
+  header img{height:60px;}
+
+  .slider{position:relative;width:100%;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;overflow:hidden;}
+  .slide{position:absolute;width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;opacity:0;transition:opacity 0.8s ease; background-size:cover; background-position:center;}
+  .slide.active{opacity:1;}
+
+  h1{font-size:3rem;margin-bottom:15px;text-shadow:2px 2px 15px rgba(0,0,0,0.8);}
+  p{font-size:1.3rem;margin-bottom:30px;max-width:700px;text-shadow:1px 1px 8px rgba(0,0,0,0.6);}
+  .btn{padding:15px 40px;font-size:1.3rem;color:white;background:linear-gradient(45deg,#ff6ec4,#7873f5);border:none;border-radius:50px;cursor:pointer;transition:0.3s;box-shadow:0 5px 25px rgba(0,0,0,0.6);}
+  .btn:hover{transform:scale(1.1);box-shadow:0 10px 35px rgba(0,0,0,0.8);}
+  #slideBtn{position:absolute;bottom:50px;left:50%;transform:translateX(-50%);z-index:100;}
+
+  canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;}
+
+  .slide h1,.slide p{transform:translateY(20px);opacity:0;animation:fadeInUp 1s forwards;}
+  .slide h1{animation-delay:0.3s;}
+  .slide p{animation-delay:0.8s;}
+  @keyframes fadeInUp{to{transform:translateY(0);opacity:1;}}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://back.wltnmarket.com/storage/images/logo/dark.png?0.609100662293576" alt="Walton Market Logo">
+</header>
+
+<canvas id="particles"></canvas>
+
+<div class="slider" id="slider">
+  <div class="slide active" style="background:linear-gradient(135deg,#0d1117,#1a1f2b);">
+    <h1>Walton Market – Investimenti AI 24/7</h1>
+    <p>Piattaforma innovativa per investimenti automatizzati in criptovalute e azioni. L’AI lavora per te 24/7 per massimizzare ogni tuo investimento.</p>
+  </div>
+  <div class="slide" style="background:linear-gradient(135deg,#1a1f2b,#0d1117);">
+    <h1>Cosa ottieni</h1>
+    <p>- L’AI analizza il mercato e prende decisioni per te<br>- Automazione completa: nessuna impostazione complessa<br>- Controllo del rendimento tramite un pannello semplice e intuitivo</p>
+  </div>
+  <div class="slide" style="background:linear-gradient(135deg,#0d1117,#121826);">
+    <h1>Il tuo vantaggio con 250€</h1>
+    <p>- Inizio con un deposito minimo di 250€<br>- AI potente per investimenti in Bitcoin, Ethereum e altri asset<br>- Piattaforma ideale per chi vuole investire in modo efficace e ottenere profitto</p>
+  </div>
+  <div class="slide" style="background:linear-gradient(135deg,#121826,#0d1117);">
+    <h1>Inizia ora</h1>
+    <p>Crea il tuo account in pochi minuti e comincia a investire con AI oggi stesso.</p>
+  </div>
+</div>
+
+<!-- Кнопка завжди тут -->
+<button class="btn" id="slideBtn">Avanti</button>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const btn = document.getElementById('slideBtn');
+  let current = 0;
+
+  function updateButton(){
+    if(current < slides.length - 1){
+      btn.textContent = 'Avanti';
+      btn.onclick = nextSlide;
+    } else {
+      btn.textContent = 'Inizia ora';
+      btn.onclick = () => { location.href='form.html'; };
+    }
+  }
+
+  function showSlide(index){
+    slides.forEach((s,i)=>s.classList.remove('active'));
+    slides[index].classList.add('active');
+    current = index;
+    updateButton();
+  }
+
+  function nextSlide(){
+    if(current < slides.length-1){
+      showSlide(current+1);
+    }
+  }
+
+  // Ініціалізація
+  showSlide(0);
+
+  // === Particle фон ===
+  const canvas=document.getElementById('particles');
+  const ctx=canvas.getContext('2d');
+  let particlesArray;
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+
+  class Particle{
+    constructor(){
+      this.x=Math.random()*canvas.width;
+      this.y=Math.random()*canvas.height;
+      this.size=Math.random()*2+1;
+      this.speedX=Math.random()*0.5-0.25;
+      this.speedY=Math.random()*0.5-0.25;
+    }
+    update(){
+      this.x+=this.speedX;
+      this.y+=this.speedY;
+      if(this.x>canvas.width)this.x=0;
+      if(this.x<0)this.x=canvas.width;
+      if(this.y>canvas.height)this.y=0;
+      if(this.y<0)this.y=canvas.height;
+    }
+    draw(){
+      ctx.fillStyle='rgba(255,255,255,0.7)';
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  function init(){particlesArray=[];for(let i=0;i<120;i++){particlesArray.push(new Particle());}}
+  function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);particlesArray.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animate);}
+  init();animate();
+  window.addEventListener('resize',()=>{
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+    init();
+  });
+</script>
+
+</body>
+</html>
