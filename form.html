@@ -13,6 +13,7 @@
   <img src="https://back.wltnmarket.com/storage/images/logo/dark.png" alt="Walton Market Logo">
   <h2>Registrazione</h2>
 
+  <!-- 🔹 Крок 1 — Форма реєстрації -->
   <form id="regForm">
     <input type="text" id="firstName" placeholder="Nome" required>
     <input type="text" id="lastName" placeholder="Cognome" required>
@@ -29,6 +30,7 @@
     <button type="submit" class="btn">Registrati</button>
   </form>
 
+  <!-- 🔹 Крок 2 — Міні-опитування -->
   <div class="step" id="survey">
     <h2>Piccolo sondaggio</h2>
     <p>Qual è il tuo obiettivo principale con Walton Market?</p>
@@ -37,7 +39,9 @@
       <option value="profitto">Profitto rapido</option>
       <option value="investimento">Investimento a lungo termine</option>
       <option value="apprendimento">Imparare trading</option>
+      <option value="non so">Non so ancora</option>
     </select>
+
     <p>Hai già esperienza di trading?</p>
     <select id="experience" required>
       <option value="" disabled selected>Seleziona un'opzione</option>
@@ -45,20 +49,134 @@
       <option value="base">Base</option>
       <option value="avanzata">Avanzata</option>
     </select>
-    <button class="btn" id="surveyBtn">Avanti</button>
+
+    <p>Che tipo di salario hai attualmente?</p>
+    <select id="salary" required>
+      <option value="" disabled selected>Seleziona</option>
+      <option value="bassa">Bassa</option>
+      <option value="media">Media</option>
+      <option value="alta">Alta</option>
+    </select>
+
+    <p>Qual è il deposito iniziale previsto?</p>
+    <select id="deposit" required>
+      <option value="" disabled selected>Seleziona</option>
+      <option value="250€">Minimo 250€</option>
+      <option value="500€">500€</option>
+      <option value="1000€+">1000€ o più</option>
+    </select>
+
+    <button class="btn" id="surveyBtn">Continua</button>
   </div>
 
+  <!-- 🔹 Кроки анімації -->
   <div class="step" id="step1"><div class="loading">Caricamento...</div></div>
   <div class="step" id="step2"><div class="check">✔</div><div>Registrazione completata!</div></div>
   <div class="step" id="step3"><div class="loading">Ricerca support-manager...</div></div>
-  <div class="step" id="step4"><div class="check">✔</div><div><strong>Manager:</strong> Erica Valenti<br><strong>Whatsapp:</strong> +34 676 70 61 00<br><strong>Email:</strong> erica.valenti@waltonmarketltd.email</div></div>
+  <div class="step" id="step4">
+    <div class="check">✔</div>
+    <div>
+      <strong>Manager:</strong> Erica Valenti<br>
+      <strong>Whatsapp:</strong> +34 676 70 61 00<br>
+      <strong>Email:</strong> erica.valenti@waltonmarketltd.email
+    </div>
+  </div>
 </div>
 
-<!-- 🔧 Підключення JS у правильному порядку -->
+<!-- ✅ Підключення скриптів -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
 <script src="js/env.js"></script>
-<script src="js/supabaseClient.js"></script>
-<script src="js/app.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("Form page loaded");
+
+  // ✅ Supabase з env.js
+  if (!window.__env) {
+    console.error("window.__env not found. Create js/env.js with real values.");
+    return;
+  }
+  const supabaseUrl = window.__env.SUPABASE_URL;
+  const supabaseAnonKey = window.__env.SUPABASE_ANON_KEY;
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+  const form = document.getElementById("regForm");
+  const phone = document.getElementById("phone");
+  const phoneError = document.getElementById("phoneError");
+  const survey = document.getElementById("survey");
+  const surveyBtn = document.getElementById("surveyBtn");
+
+  const steps = [
+    document.getElementById('step1'),
+    document.getElementById('step2'),
+    document.getElementById('step3'),
+    document.getElementById('step4')
+  ];
+
+  function showStep(index) {
+    steps.forEach(s => s.classList.remove('active'));
+    survey.classList.remove('active');
+    if (index >= 0 && index < steps.length) steps[index].classList.add('active');
+  }
+
+  let userData = {};
+
+  // 🔹 Збір даних з реєстрації
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const phoneValue = phone.value.trim();
+    if (!/^[0-9]{9,10}$/.test(phoneValue)) {
+      phoneError.style.display = 'block';
+      return;
+    }
+    phoneError.style.display = 'none';
+
+    userData = {
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      email: document.getElementById('email').value,
+      prefix: document.getElementById('prefix').value,
+      phone: phoneValue,
+      date: new Date().toLocaleString()
+    };
+
+    form.style.display = 'none';
+    survey.classList.add('active');
+  });
+
+  // 🔹 Відправлення в Supabase
+  surveyBtn.addEventListener('click', async () => {
+    const goal = document.getElementById('goal').value;
+    const experience = document.getElementById('experience').value;
+    const salary = document.getElementById('salary').value;
+    const deposit = document.getElementById('deposit').value;
+
+    if (!goal || !experience || !salary || !deposit) {
+      alert("Compila tutte le risposte!");
+      return;
+    }
+
+    userData = { ...userData, goal, experience, salary, deposit };
+
+    try {
+      const { data, error } = await supabase.from("users").insert([userData]);
+      if (error) throw error;
+      console.log("✅ User saved:", data);
+    } catch (err) {
+      console.error("❌ Supabase error:", err);
+      alert("Errore durante il salvataggio. Riprova.");
+      return;
+    }
+
+    // 🔹 Анімація кроків
+    survey.classList.remove('active');
+    showStep(0);
+    setTimeout(() => showStep(1), 2000);
+    setTimeout(() => showStep(2), 4000);
+    setTimeout(() => showStep(3), 6000);
+  });
+});
+</script>
 
 </body>
 </html>
