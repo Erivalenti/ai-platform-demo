@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Walton Market</title>
-  <link rel="icon" href="https://back.wltnmarket.com/storage/images/logo/dark.png?0.609100662293576" type="image/png">
+  <link rel="icon" href="https://back.wltnmarket.com/storage/images/logo/dark.png" type="image/png">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
 <header>
-  <img src="https://back.wltnmarket.com/storage/images/logo/dark.png?0.609100662293576" alt="Walton Market Logo">
+  <img src="https://back.wltnmarket.com/storage/images/logo/dark.png" alt="Walton Market Logo">
 </header>
 
 <canvas id="particles"></canvas>
@@ -20,28 +20,85 @@
     <h1>Walton Market – Investimenti AI 24/7</h1>
     <p>Piattaforma innovativa per investimenti automatizzati in criptovalute e azioni. L’AI lavora per te 24/7 per massimizzare ogni tuo investimento.</p>
   </div>
+
   <div class="slide" style="background:linear-gradient(135deg,#1a1f2b,#0d1117);">
     <h1>Cosa ottieni</h1>
-    <p>- L’AI analizza il mercato e prende decisioni per te<br>- Automazione completa: nessuna impostazione complessa<br>- Controllo del rendimento tramite un pannello semplice e intuitivo</p>
+    <p>- L’AI analizza il mercato e prende decisioni per te<br>- Automazione completa, nessuna impostazione complessa<br>- Controllo del rendimento tramite un pannello semplice e intuitivo</p>
   </div>
+
   <div class="slide" style="background:linear-gradient(135deg,#0d1117,#121826);">
     <h1>Il tuo vantaggio con 250€</h1>
     <p>- Inizio con un deposito minimo di 250€<br>- AI potente per investimenti in Bitcoin, Ethereum e altri asset<br>- Piattaforma ideale per chi vuole investire in modo efficace e ottenere profitto</p>
   </div>
+
   <div class="slide" style="background:linear-gradient(135deg,#121826,#0d1117);">
     <h1>Inizia ora</h1>
     <p>Crea il tuo account in pochi minuti e comincia a investire con AI oggi stesso.</p>
   </div>
 </div>
 
-<!-- Кнопка завжди тут -->
+<!-- Кнопка -->
 <button class="btn" id="slideBtn">Avanti</button>
 
-<!-- ✅ Правильний порядок JS -->
+<!-- ✅ Скрипти у правильному порядку -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
 <script src="js/env.js"></script>
-<script src="js/supabaseClient.js"></script>
-<script src="js/app.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("✅ Index page loaded");
+
+  const slides = document.querySelectorAll('.slide');
+  const button = document.getElementById('slideBtn');
+  let currentSlide = 0;
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === index);
+    });
+  }
+
+  button.addEventListener('click', () => {
+    currentSlide++;
+    if (currentSlide < slides.length) {
+      showSlide(currentSlide);
+    } else {
+      // 👉 Перехід на форму після останнього слайду
+      window.location.href = "form.html";
+    }
+  });
+
+  // (опціонально) ефект частинок
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const particles = Array.from({ length: 50 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2,
+    dx: (Math.random() - 0.5) * 0.5,
+    dy: (Math.random() - 0.5) * 0.5
+  }));
+
+  function drawParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "rgba(255,255,255,0.3)";
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      p.x += p.dx;
+      p.y += p.dy;
+      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    });
+    requestAnimationFrame(drawParticles);
+  }
+  drawParticles();
+});
+</script>
 
 </body>
 </html>
