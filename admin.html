@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,82 +34,103 @@
   <form id="loginForm">
     <input type="text" id="login" placeholder="Login" required>
     <input type="password" id="password" placeholder="Password" required>
-    <button type="submit">Accedi</button>
+    <button type="submit">Login</button>
   </form>
 </div>
 
-<!-- Таблиця користувачів -->
+<!-- Users table -->
 <div id="adminTable" style="display:none;">
   <table>
     <thead>
       <tr>
-        <th>Nome</th>
-        <th>Cognome</th>
+        <th>First Name</th>
+        <th>Last Name</th>
         <th>Email</th>
-        <th>Prefisso</th>
-        <th>Telefono</th>
-        <th>Obiettivo</th>
-        <th>Esperienza</th>
-        <th>Data</th>
+        <th>Prefix</th>
+        <th>Phone</th>
+        <th>Goal</th>
+        <th>Experience</th>
+        <th>Date</th>
       </tr>
     </thead>
     <tbody id="userTable">
-      <!-- Дані підтягуються сюди -->
+      <!-- Users data will be inserted here -->
     </tbody>
   </table>
 </div>
 
-<script>
-  const loginForm = document.getElementById('loginForm');
-  const loginDiv = document.getElementById('loginDiv');
-  const adminTable = document.getElementById('adminTable');
-  const userTable = document.getElementById('userTable');
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-  const ADMIN_LOGIN = 'admin138';
-  const ADMIN_PASSWORD = 'admin2025';
+// --- Вставляєш сюди свої дані Supabase ---
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  loginForm.addEventListener('submit', function(e){
-    e.preventDefault();
-    const loginValue = document.getElementById('login').value;
-    const passwordValue = document.getElementById('password').value;
+const loginForm = document.getElementById('loginForm');
+const loginDiv = document.getElementById('loginDiv');
+const adminTable = document.getElementById('adminTable');
+const userTable = document.getElementById('userTable');
 
-    if(loginValue === ADMIN_LOGIN && passwordValue === ADMIN_PASSWORD){
-      loginDiv.style.display='none';
-      adminTable.style.display='block';
-      loadUsers();
-    } else {
-      alert('Login o password errati!');
-    }
-  });
+const ADMIN_LOGIN = 'admin138';
+const ADMIN_PASSWORD = 'admin2025';
 
-  function loadUsers(){
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    userTable.innerHTML = '';
-    if(users.length === 0){
-      const tr = document.createElement('tr');
-      const td = document.createElement('td');
-      td.colSpan = 8;
-      td.textContent = 'Nessun utente registrato';
-      td.style.textAlign = 'center';
-      tr.appendChild(td);
-      userTable.appendChild(tr);
-    } else {
-      users.forEach(user => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${user.firstName}</td>
-          <td>${user.lastName}</td>
-          <td>${user.email}</td>
-          <td>${user.prefix}</td>
-          <td>${user.phone}</td>
-          <td>${user.goal || ''}</td>
-          <td>${user.experience || ''}</td>
-          <td>${user.date}</td>
-        `;
-        userTable.appendChild(tr);
-      });
-    }
+loginForm.addEventListener('submit', async function(e){
+  e.preventDefault();
+  const loginValue = document.getElementById('login').value;
+  const passwordValue = document.getElementById('password').value;
+
+  if(loginValue === ADMIN_LOGIN && passwordValue === ADMIN_PASSWORD){
+    loginDiv.style.display='none';
+    adminTable.style.display='block';
+    await loadUsers();
+  } else {
+    alert('Invalid login or password!');
   }
+});
+
+async function loadUsers(){
+  const { data: users, error } = await supabase.from('users').select('*');
+  userTable.innerHTML = '';
+
+  if(error){
+    console.error('Supabase error:', error);
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 8;
+    td.textContent = 'Error loading users';
+    td.style.textAlign = 'center';
+    tr.appendChild(td);
+    userTable.appendChild(tr);
+    return;
+  }
+
+  if(!users || users.length === 0){
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 8;
+    td.textContent = 'No users registered';
+    td.style.textAlign = 'center';
+    tr.appendChild(td);
+    userTable.appendChild(tr);
+    return;
+  }
+
+  users.forEach(user => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${user.firstName || ''}</td>
+      <td>${user.lastName || ''}</td>
+      <td>${user.email || ''}</td>
+      <td>${user.prefix || ''}</td>
+      <td>${user.phone || ''}</td>
+      <td>${user.goal || ''}</td>
+      <td>${user.experience || ''}</td>
+      <td>${user.date || ''}</td>
+    `;
+    userTable.appendChild(tr);
+  });
+}
 </script>
 
 </body>
