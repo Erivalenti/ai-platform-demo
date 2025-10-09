@@ -55,8 +55,8 @@ document.addEventListener("DOMContentLoaded", () => {
       users.forEach((user) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${user.firstName || ""}</td>
-          <td>${user.lastName || ""}</td>
+          <td>${user.first_name || ""}</td>
+          <td>${user.last_name || ""}</td>
           <td>${user.email || ""}</td>
           <td>${user.prefix || ""}</td>
           <td>${user.phone || ""}</td>
@@ -105,8 +105,8 @@ document.addEventListener("DOMContentLoaded", () => {
       phoneError.style.display = "none";
 
       userData = {
-        firstName: document.getElementById("firstName").value,
-        lastName: document.getElementById("lastName").value,
+        first_name: document.getElementById("firstName").value,
+        last_name: document.getElementById("lastName").value,
         email: document.getElementById("email").value,
         prefix: document.getElementById("prefix").value,
         phone: phoneValue,
@@ -127,26 +127,13 @@ document.addEventListener("DOMContentLoaded", () => {
       userData.experience = experience.value;
 
       try {
-  const { error } = await supabase.from("users").insert([
-    {
-      first_name: userData.firstName,
-      last_name: userData.lastName,
-      email: userData.email,
-      prefix: userData.prefix,
-      phone: userData.phone,
-      goal: userData.goal,
-      experience: userData.experience,
-      date: userData.date
-    }
-  ]);
-
-  if (error) throw error;
-} catch (err) {
-  console.error("❌ Supabase error:", err);
-  alert("Errore durante il salvataggio. Riprova.");
-  return;
-}
-
+        const { error } = await supabase.from("users").insert([userData]);
+        if (error) throw error;
+      } catch (err) {
+        console.error("❌ Supabase error:", err);
+        alert("Errore durante il salvataggio. Riprova.");
+        return;
+      }
 
       survey.classList.remove("active");
       showStep(0);
