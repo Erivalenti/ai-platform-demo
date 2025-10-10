@@ -1,153 +1,315 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel - Walton Market</title>
 
   <!-- 🔹 Іконка вкладки -->
   <link rel="icon" type="image/jpeg" href="https://as1.ftcdn.net/jpg/00/07/32/48/1000_F_7324855_mx4CEBWTr81XLOrlQccCROtP2uNR7xbk.jpg">
 
+  <!-- 🔹 Шрифт -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/admin.css">
+
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #f5f7fb;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      padding: 15px;
+    }
+
+    header img {
+      height: 45px;
+    }
+
+    header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #222;
+      margin: 0;
+    }
+
+    #loginDiv {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80vh;
+    }
+
+    form {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 300px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      background: #1e293b;
+      color: white;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #0f172a;
+    }
+
+    #adminTable {
+      padding: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .toolbar input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      min-width: 250px;
+    }
+
+    .toolbar button {
+      background: #2563eb;
+      color: white;
+    }
+
+    .toolbar button:hover {
+      background: #1d4ed8;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #1e293b;
+      color: white;
+    }
+
+    tr:hover {
+      background: #f1f5f9;
+    }
+
+    @media (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+      thead {
+        display: none;
+      }
+      tr {
+        margin-bottom: 15px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+      }
+      td {
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 15px;
+      }
+      td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: #555;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <header>
+    <img src="https://back.wltnmarket.com/storage/images/logo/dark.png" alt="Walton Market Logo">
+    <h1>Admin Panel</h1>
+  </header>
 
-<header>
-  <img src="https://back.wltnmarket.com/storage/images/logo/dark.png" alt="Walton Market Logo">
-  <h1>Admin Panel</h1>
-</header>
-
-<!-- 🔐 Login -->
-<div id="loginDiv">
-  <form id="loginForm">
-    <input type="text" id="login" placeholder="Login" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button type="submit">Login</button>
-  </form>
-</div>
-
-<!-- 📋 Users table -->
-<div id="adminTable" style="display:none;">
-  <div class="toolbar">
-    <input type="text" id="searchInput" placeholder="🔍 Cerca per email...">
-    <button id="refreshBtn">🔄 Aggiorna</button>
+  <!-- 🔐 Login -->
+  <div id="loginDiv">
+    <form id="loginForm">
+      <h2>Accesso Admin</h2>
+      <input type="text" id="login" placeholder="Login" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Entra</button>
+    </form>
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Email</th>
-        <th>Prefix</th>
-        <th>Phone</th>
-        <th>Goal</th>
-        <th>Experience</th>
-        <th>Salary</th>
-        <th>Deposit</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody id="userTable">
-      <!-- Users will appear here -->
-    </tbody>
-  </table>
-</div>
+  <!-- 📋 Таблиця користувачів -->
+  <div id="adminTable" style="display:none;">
+    <div class="toolbar">
+      <input type="text" id="searchInput" placeholder="🔍 Cerca per email...">
+      <div>
+        <button id="refreshBtn">🔄 Aggiorna</button>
+        <button id="exportBtn">📁 Esporta Excel</button>
+      </div>
+    </div>
 
-<!-- ✅ Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
-<script src="js/env.js"></script>
+    <table>
+      <thead>
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Prefix</th>
+          <th>Phone</th>
+          <th>Goal</th>
+          <th>Experience</th>
+          <th>Salary</th>
+          <th>Deposit</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="userTable"></tbody>
+    </table>
+  </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', async () => {
-  console.log("Admin panel loaded");
+  <!-- ✅ Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script src="js/env.js"></script>
 
-  const ADMIN_LOGIN = "admin138";
-  const ADMIN_PASSWORD = "admin2025";
+  <script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const ADMIN_LOGIN = "admin138";
+    const ADMIN_PASSWORD = "admin2025";
 
-  if (!window.__env) {
-    console.error("window.__env not found. Please create js/env.js");
-    return;
-  }
-
-  const supabaseUrl = window.__env.SUPABASE_URL;
-  const supabaseAnonKey = window.__env.SUPABASE_ANON_KEY;
-  const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
-
-  const loginForm = document.getElementById("loginForm");
-  const loginDiv = document.getElementById("loginDiv");
-  const adminTable = document.getElementById("adminTable");
-  const userTable = document.getElementById("userTable");
-  const searchInput = document.getElementById("searchInput");
-  const refreshBtn = document.getElementById("refreshBtn");
-
-  // 🔐 Login
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const login = document.getElementById("login").value.trim();
-    const password = document.getElementById("password").value.trim();
-
-    if (login === ADMIN_LOGIN && password === ADMIN_PASSWORD) {
-      loginDiv.style.display = "none";
-      adminTable.style.display = "block";
-      await loadUsers();
-      setInterval(loadUsers, 30000); // автооновлення кожні 30 сек
-    } else {
-      alert("❌ Invalid login or password!");
-    }
-  });
-
-  // 🔁 Кнопка оновлення
-  refreshBtn.addEventListener("click", loadUsers);
-
-  // 🔍 Пошук по email
-  searchInput.addEventListener("input", () => {
-    const filter = searchInput.value.toLowerCase();
-    const rows = userTable.querySelectorAll("tr");
-    rows.forEach(row => {
-      const email = row.cells[2]?.textContent.toLowerCase() || "";
-      row.style.display = email.includes(filter) ? "" : "none";
-    });
-  });
-
-  // 📦 Завантаження користувачів
-  async function loadUsers() {
-    userTable.innerHTML = "<tr><td colspan='10'>Caricamento...</td></tr>";
-
-    const { data: users, error } = await supabase.from("users").select("*");
-
-    if (error) {
-      console.error("Supabase error:", error);
-      userTable.innerHTML = `<tr><td colspan="10" style="text-align:center;">Error loading users</td></tr>`;
+    if (!window.__env) {
+      alert("⚠️ js/env.js mancante!");
       return;
     }
 
-    if (!users || users.length === 0) {
-      userTable.innerHTML = `<tr><td colspan="10" style="text-align:center;">Nessun utente trovato</td></tr>`;
-      return;
-    }
+    const supabase = window.supabase.createClient(
+      window.__env.SUPABASE_URL,
+      window.__env.SUPABASE_ANON_KEY
+    );
 
-    userTable.innerHTML = "";
-    users.forEach((user) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${user.first_name || ""}</td>
-        <td>${user.last_name || ""}</td>
-        <td>${user.email || ""}</td>
-        <td>${user.prefix || ""}</td>
-        <td>${user.phone || ""}</td>
-        <td>${user.goal || ""}</td>
-        <td>${user.experience || ""}</td>
-        <td>${user.salary || ""}</td>
-        <td>${user.deposit || ""}</td>
-        <td>${user.date || ""}</td>
-      `;
-      userTable.appendChild(tr);
+    const loginForm = document.getElementById("loginForm");
+    const loginDiv = document.getElementById("loginDiv");
+    const adminTable = document.getElementById("adminTable");
+    const userTable = document.getElementById("userTable");
+    const searchInput = document.getElementById("searchInput");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const exportBtn = document.getElementById("exportBtn");
+
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const login = document.getElementById("login").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (login === ADMIN_LOGIN && password === ADMIN_PASSWORD) {
+        loginDiv.style.display = "none";
+        adminTable.style.display = "block";
+        await loadUsers();
+        setInterval(loadUsers, 30000);
+      } else {
+        alert("❌ Credenziali non valide!");
+      }
     });
-  }
-});
-</script>
 
+    refreshBtn.addEventListener("click", loadUsers);
+
+    searchInput.addEventListener("input", () => {
+      const filter = searchInput.value.toLowerCase();
+      const rows = userTable.querySelectorAll("tr");
+      rows.forEach(row => {
+        const email = row.cells[2]?.textContent.toLowerCase() || "";
+        row.style.display = email.includes(filter) ? "" : "none";
+      });
+    });
+
+    exportBtn.addEventListener("click", () => {
+      const rows = [["First Name","Last Name","Email","Prefix","Phone","Goal","Experience","Salary","Deposit","Date"]];
+      userTable.querySelectorAll("tr").forEach(tr => {
+        const cells = Array.from(tr.querySelectorAll("td")).map(td => td.textContent);
+        rows.push(cells);
+      });
+      const ws = XLSX.utils.aoa_to_sheet(rows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Users");
+      XLSX.writeFile(wb, "users.xlsx");
+    });
+
+    async function loadUsers() {
+      userTable.innerHTML = "<tr><td colspan='10'>Caricamento...</td></tr>";
+
+      const { data: users, error } = await supabase.from("users").select("*");
+      if (error) {
+        userTable.innerHTML = `<tr><td colspan="10" style="text-align:center;">Errore caricamento</td></tr>`;
+        return;
+      }
+
+      if (!users.length) {
+        userTable.innerHTML = `<tr><td colspan="10" style="text-align:center;">Nessun utente trovato</td></tr>`;
+        return;
+      }
+
+      userTable.innerHTML = "";
+      users.forEach(u => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td data-label="First Name">${u.first_name || ""}</td>
+          <td data-label="Last Name">${u.last_name || ""}</td>
+          <td data-label="Email">${u.email || ""}</td>
+          <td data-label="Prefix">${u.prefix || ""}</td>
+          <td data-label="Phone">${u.phone || ""}</td>
+          <td data-label="Goal">${u.goal || ""}</td>
+          <td data-label="Experience">${u.experience || ""}</td>
+          <td data-label="Salary">${u.salary || ""}</td>
+          <td data-label="Deposit">${u.deposit || ""}</td>
+          <td data-label="Date">${u.date || ""}</td>
+        `;
+        userTable.appendChild(tr);
+      });
+    }
+  });
+  </script>
 </body>
 </html>
