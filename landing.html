@@ -1,187 +1,186 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>L’algoritmo AI che sta rivoluzionando gli investimenti in Italia</title>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L’intelligenza Artificiale che sta cambiando la finanza in Italia</title>
   <link rel="icon" href="https://i.ibb.co/hJqZJpD6/immagine-2025-10-10-132859455.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
+    *{margin:0;padding:0;box-sizing:border-box}
     body{
       font-family:'Montserrat',sans-serif;
+      background-color:#000;
       color:#fff;
-      background:#030712;
       overflow-x:hidden;
     }
-    video.bg-video{
+    video.bg{
       position:fixed;
       top:0;left:0;width:100%;height:100%;
       object-fit:cover;
       z-index:-2;
       opacity:0.35;
+      filter:brightness(0.8);
     }
     .overlay{
       position:fixed;
-      top:0;left:0;width:100%;height:100%;
-      background:radial-gradient(circle at 20% 30%,rgba(0,100,255,0.15),transparent 60%), radial-gradient(circle at 80% 70%,rgba(255,0,120,0.15),transparent 60%);
+      inset:0;
+      background:radial-gradient(circle at 20% 20%,rgba(0,200,255,0.1),transparent 70%),
+                 radial-gradient(circle at 80% 80%,rgba(255,0,100,0.15),transparent 70%);
       z-index:-1;
     }
-
-    .wrap{
-      max-width:1100px;
-      margin:auto;
-      padding:60px 20px;
+    header{
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
       text-align:center;
-      animation:fadeIn 1.2s ease;
+      padding:0 20px;
     }
-
-    .logo{height:55px;margin-bottom:25px;filter:drop-shadow(0 0 8px rgba(255,255,255,0.3));}
-
     h1{
-      font-size:34px;
-      line-height:1.1;
-      margin-bottom:18px;
-      text-shadow:0 0 14px rgba(255,255,255,0.15);
+      font-size:42px;
+      max-width:900px;
+      line-height:1.2;
+      margin-bottom:20px;
+      text-shadow:0 0 18px rgba(255,255,255,0.25);
+      animation:fadeIn 1.5s ease;
     }
-
-    p.lead{
-      font-size:18px;
+    h2.type{
+      font-size:20px;
       color:#cbd5e1;
-      margin-bottom:32px;
+      min-height:28px;
+      margin-bottom:30px;
     }
-
-    .btn{
-      background:linear-gradient(90deg,#ff4d4f,#ff7679);
-      color:#fff;
-      border:0;
-      padding:16px 30px;
-      border-radius:14px;
-      font-weight:700;
-      cursor:pointer;
-      font-size:17px;
-      transition:all .3s ease;
-      box-shadow:0 0 14px rgba(255,77,79,0.35);
-    }
-    .btn:hover{transform:scale(1.06);box-shadow:0 0 24px rgba(255,77,79,0.55);}
-    .btn.ghost{
-      background:transparent;
-      border:1px solid rgba(255,255,255,0.3);
-      margin-left:12px;
-      box-shadow:none;
-    }
-
-    .features{
-      display:flex;
-      justify-content:center;
-      flex-wrap:wrap;
-      margin-top:60px;
-      gap:22px;
-    }
-    .card{
-      background:rgba(255,255,255,0.05);
-      backdrop-filter:blur(10px);
-      border-radius:16px;
-      padding:24px;
-      width:300px;
-      text-align:left;
-      transition:all .3s ease;
-    }
-    .card:hover{
-      transform:translateY(-6px);
-      background:rgba(255,255,255,0.08);
-    }
-    .card h3{margin-bottom:10px;font-size:18px;}
-    .card p{color:#a8b2c1;font-size:14px;line-height:1.4;}
-
-    .reviews{
-      margin-top:60px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:16px;
-      justify-content:center;
-    }
-    .rev{
-      background:rgba(255,255,255,0.03);
-      border-left:3px solid #ff4d4f;
-      padding:16px;
-      border-radius:10px;
-      width:300px;
-      font-size:14px;
-      color:#cbd5e1;
-      animation:fadeUp 1.3s ease;
-    }
-
-    footer{
-      margin-top:60px;
-      color:#667085;
-      font-size:13px;
-    }
-
     @keyframes fadeIn{
-      from{opacity:0;transform:translateY(15px)}
-      to{opacity:1;transform:translateY(0)}
-    }
-    @keyframes fadeUp{
       from{opacity:0;transform:translateY(25px)}
       to{opacity:1;transform:translateY(0)}
     }
+    .btn{
+      background:linear-gradient(90deg,#ff003c,#ff7b00);
+      border:none;
+      padding:18px 40px;
+      border-radius:40px;
+      color:#fff;
+      font-weight:700;
+      font-size:18px;
+      cursor:pointer;
+      box-shadow:0 0 25px rgba(255,0,60,0.4);
+      transition:all .3s ease;
+      animation:pulse 2s infinite;
+    }
+    @keyframes pulse{
+      0%{box-shadow:0 0 20px rgba(255,0,60,0.4);}
+      50%{box-shadow:0 0 45px rgba(255,123,0,0.6);}
+      100%{box-shadow:0 0 20px rgba(255,0,60,0.4);}
+    }
+    .btn:hover{transform:scale(1.05)}
 
-    @media(max-width:768px){
-      h1{font-size:26px}
-      .card{width:90%}
-      .rev{width:90%}
+    section{
+      padding:100px 20px;
+      text-align:center;
+      background:rgba(255,255,255,0.02);
+    }
+    h3{font-size:28px;margin-bottom:20px}
+    .cards{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:30px;
+    }
+    .card{
+      width:300px;
+      background:rgba(255,255,255,0.05);
+      border-radius:16px;
+      padding:24px;
+      backdrop-filter:blur(10px);
+      transition:transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover{
+      transform:translateY(-10px);
+      box-shadow:0 0 25px rgba(255,77,79,0.3);
+    }
+    footer{
+      padding:40px 20px;
+      font-size:14px;
+      color:#999;
+      text-align:center;
+      background:#050505;
     }
   </style>
 </head>
 
 <body>
-
-  <video autoplay muted loop class="bg-video">
-    <source src="https://cdn.coverr.co/videos/coverr-stock-exchange-trading-screen-6572/1080p.mp4" type="video/mp4">
+  <video autoplay muted loop class="bg">
+    <source src="https://cdn.coverr.co/videos/coverr-financial-data-on-digital-screen-7371/1080p.mp4" type="video/mp4">
   </video>
   <div class="overlay"></div>
 
-  <div class="wrap">
-    <img class="logo" src="https://back.wltnmarket.com/storage/images/logo/dark.png" alt="Walton Market Logo">
+  <header>
+    <img src="https://back.wltnmarket.com/storage/images/logo/dark.png" alt="Logo" style="height:60px;margin-bottom:20px">
+    <h1>Lascia che l’intelligenza artificiale generi profitti mentre tu vivi la tua vita.</h1>
+    <h2 class="type" id="typeText"></h2>
+    <a href="form.html" class="btn">Provalo Ora</a>
+  </header>
 
-    <h1>Il nuovo algoritmo AI che investe al posto tuo.<br>Scopri come centinaia di italiani stanno già vedendo risultati reali ogni giorno.</h1>
-    <p class="lead">Prova la demo con 250€ di capitale iniziale offerto dalla piattaforma.<br>Ricevi assistenza personale per l’attivazione.</p>
-
-    <a class="btn" href="form.html">Provalo ora gratuitamente</a>
-    <button class="btn ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">Come funziona</button>
-
-    <div class="features" id="how">
+  <section>
+    <h3>Come funziona</h3>
+    <div class="cards">
       <div class="card">
-        <h3>🔹 Registrazione rapida</h3>
-        <p>Compila il modulo e ricevi subito l’accesso alla piattaforma AI, senza carte di credito.</p>
+        <h4>⚡ Registrazione immediata</h4>
+        <p>Entra in piattaforma in meno di 2 minuti e ricevi il tuo manager personale.</p>
       </div>
       <div class="card">
-        <h3>🤖 Algoritmo intelligente</h3>
-        <p>L’AI analizza i mercati e apre operazioni automatiche con rischio controllato e profitto ottimizzato.</p>
+        <h4>🤖 Algoritmo AI</h4>
+        <p>Il sistema analizza i mercati in tempo reale e apre operazioni automatiche.</p>
       </div>
       <div class="card">
-        <h3>💼 Manager personale</h3>
-        <p>Un esperto ti contatta, ti guida passo dopo passo e ti mostra i risultati in tempo reale.</p>
+        <h4>💰 Profitti giornalieri</h4>
+        <p>Segui i tuoi guadagni crescere ogni giorno direttamente dal tuo pannello personale.</p>
       </div>
     </div>
+  </section>
 
-    <div class="reviews">
-      <div class="rev">"Ho iniziato solo per curiosità. Dopo 3 giorni avevo già visto i primi risultati — e tutto in automatico!"<br><strong>- Luca, Milano</strong></div>
-      <div class="rev">"Finalmente qualcosa che funziona. Il manager è stato gentilissimo e chiaro. Ottima esperienza."<br><strong>- Giulia, Roma</strong></div>
-      <div class="rev">"Semplice, trasparente e sorprendentemente efficace. L’AI lavora mentre io faccio altro."<br><strong>- Marco, Napoli</strong></div>
-    </div>
-
-    <footer>© 2025 Walton Market LTD • Tutti i diritti riservati • Supporto clienti in italiano</footer>
-  </div>
+  <footer>© 2025 Walton Market LTD — Tutti i diritti riservati</footer>
 
   <script>
-    // Запам’ятовує джерело, якщо потрібно
-    document.querySelector('.btn').addEventListener('click',()=>{
-      try{localStorage.setItem('landing_source','demo250video');}catch(e){}
-    });
+    // Ефект друкування тексту
+    const words = [
+      "L’intelligenza artificiale non dorme mai.",
+      "Il futuro degli investimenti è già qui.",
+      "Guarda cosa può fare l’AI per te."
+    ];
+    let i = 0;
+    let j = 0;
+    let currentWord = "";
+    let isDeleting = false;
+    const el = document.getElementById("typeText");
+
+    function type() {
+      if (i < words.length) {
+        if (!isDeleting && j <= words[i].length) {
+          currentWord = words[i].substring(0, j++);
+        }
+        if (isDeleting && j >= 0) {
+          currentWord = words[i].substring(0, j--);
+        }
+        el.textContent = currentWord;
+
+        let speed = isDeleting ? 60 : 120;
+
+        if (!isDeleting && j === words[i].length) {
+          speed = 1800;
+          isDeleting = true;
+        } else if (isDeleting && j === 0) {
+          isDeleting = false;
+          i++;
+          if (i === words.length) i = 0;
+          speed = 400;
+        }
+        setTimeout(type, speed);
+      }
+    }
+    type();
   </script>
 </body>
 </html>
