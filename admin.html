@@ -35,6 +35,8 @@
         <th>Phone</th>
         <th>Goal</th>
         <th>Experience</th>
+        <th>Salary</th>
+        <th>Deposit</th>
         <th>Date</th>
       </tr>
     </thead>
@@ -55,9 +57,8 @@
     const ADMIN_LOGIN = "admin138";
     const ADMIN_PASSWORD = "admin2025";
 
-    // ✅ Підключення до Supabase через env.js
     if (!window.__env) {
-      console.error("window.__env not found. Please create js/env.js from js/env.example.js");
+      console.error("window.__env not found. Please create js/env.js");
       return;
     }
 
@@ -91,25 +92,27 @@
 
       if (error) {
         console.error("Supabase error:", error);
-        userTable.innerHTML = `<tr><td colspan="8" style="text-align:center;">Error loading users</td></tr>`;
+        userTable.innerHTML = `<tr><td colspan="10" style="text-align:center;">Error loading users</td></tr>`;
         return;
       }
 
       if (!users || users.length === 0) {
-        userTable.innerHTML = `<tr><td colspan="8" style="text-align:center;">No users found</td></tr>`;
+        userTable.innerHTML = `<tr><td colspan="10" style="text-align:center;">No users found</td></tr>`;
         return;
       }
 
       users.forEach((user) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${user.firstName || ""}</td>
-          <td>${user.lastName || ""}</td>
+          <td>${user.first_name || ""}</td>
+          <td>${user.last_name || ""}</td>
           <td>${user.email || ""}</td>
           <td>${user.prefix || ""}</td>
           <td>${user.phone || ""}</td>
           <td>${user.goal || ""}</td>
           <td>${user.experience || ""}</td>
+          <td>${user.salary || ""}</td>
+          <td>${user.deposit || ""}</td>
           <td>${user.date || ""}</td>
         `;
         userTable.appendChild(tr);
