@@ -123,11 +123,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const surveyBtn = document.getElementById("surveyBtn");
 
   const steps = [
-    document.getElementById('step1'),
-    document.getElementById('step2'),
-    document.getElementById('step3'),
-    document.getElementById('step4')
-  ];
+  document.getElementById('step1'),
+  document.getElementById('step2'),
+  document.getElementById('step3'),
+  document.getElementById('step4'),
+  document.getElementById('step5')
+];
+
 
   function showStep(index) {
     steps.forEach(s => s.classList.remove('active'));
@@ -191,12 +193,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 🔹 Анімація кроків
-    survey.classList.remove('active');
-    showStep(0);
        setTimeout(() => showStep(1), 2000);
     setTimeout(() => showStep(2), 4000);
     setTimeout(() => showStep(3), 6000);
   });
+
+  // 🔹 Кнопка "Continua" -> показує фінальний екран
+  const continueBtn = document.getElementById("continueBtn");
+  if (continueBtn) {
+    continueBtn.addEventListener("click", () => {
+      showStep(4); // показує step5
+      document.getElementById("finalEmail").textContent = userData.email;
+    });
+  }
 
   // 🔹 Кнопка "Accedi" -> відкриває дашборд
   document.addEventListener('click', (e) => {
