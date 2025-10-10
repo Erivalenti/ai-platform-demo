@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>L’algoritmo AI che ha già reso ricchi centinaia di italiani (e nessuno ne parla ancora!)</title>
+  <link rel="icon" href="https://i.ibb.co/hJqZJpD6/immagine-2025-10-10-132859455.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--accent:#ff4d4f;--dark:#061423;--muted:#667085}
+    *{box-sizing:border-box}
+    body{font-family:'Montserrat',sans-serif;margin:0;background:linear-gradient(180deg,#071021 0%, #0b2233 100%);color:#fff}
+    .wrap{max-width:980px;margin:32px auto;padding:28px}
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:30px;align-items:center}
+    .logo{height:44px;margin-bottom:14px}
+    h1{font-size:28px;margin:6px 0 12px;line-height:1.05}
+    p.lead{color:var(--muted);margin:0 0 18px;font-size:15px}
+    .cta{display:flex;gap:12px}
+    .btn{background:var(--accent);color:#fff;padding:14px 18px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.12);color:#fff}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:20px;border-radius:12px}
+    .right{background:#071827;padding:18px;border-radius:12px}
+    ul{padding-left:18px;color:var(--muted)}
+    .trust{margin-top:14px;color:#cbd5e1;font-size:13px}
+    .notice{background:rgba(255,77,79,0.08);padding:12px;border-left:4px solid var(--accent);border-radius:8px;margin-top:18px;color:#fff}
+    .steps{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+    .step{background:rgba(255,255,255,0.03);padding:12px;border-radius:8px;font-size:14px}
+    .footer{margin-top:28px;color:var(--muted);font-size:13px}
+    .reviews{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap}
+    .rev{background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;width:calc(33% - 8px);min-width:200px}
+    @media (max-width:920px){.hero{grid-template-columns:1fr;}.right{order:-1}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <img class="logo" src="https://back.wltnmarket.com/storage/images/logo/dark.png" alt="Logo">
+        <div class="card">
+          <h1>Guadagni automatici ogni giorno grazie all’intelligenza artificiale che opera al posto tuo.
+Non serve esperienza — basta registrarsi e attivare il tuo conto con il manager personale.</h1>
+          <p class="lead">Ricevi Manager personale per attivazione e supporto.</p>
+
+          <div class="cta">
+            <a class="btn" href="form.html" id="ctaPrimary">Solo oggi inizia con il minimo — REGISTRATI</a>
+            <a class="btn ghost" href="#how">Come funziona</a>
+          </div>
+
+          <div class="trust">⚠️ Posti limitati: 17 nuovi conti disponibili oggi.
+Dopo la chiusura delle iscrizioni, l’accesso sarà su invito.•  GDPR compliant • Supporto in italiano</div>
+          </div>
+
+          <div class="steps" id="how">
+            <div class="step"><strong>1)</strong> Registrati gratis</div>
+            <div class="step"><strong>2)</strong> Il manager ti contatta</div>
+            <div class="step"><strong>3)</strong> L’AI inizia a generare profitti in automatico</div>
+          </div>
+
+          <div class="reviews">
+            <div class="rev"><strong>"Pensavo fosse uno scherzo… ora il mio algoritmo mi genera 247 € al giorno. Tutto automatico."</strong><br><small>- Luca, Milano</small></div>
+            <div class="rev"><strong>"Finalmente qualcosa che funziona davvero — senza truffe e senza complicazioni."</strong><br><small>- Giulia, Roma</small></div>
+            <div class="rev"><strong>"Il mananger contatta subito, da una perfetta spiegazione, e aiuta con attivazione, molto gentili e educati, complimenti."</strong><br><small>- Marco, Napoli</small></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="right card">
+        <h3 style="margin:0 0 8px">Cosa ottieni ora</h3>
+        <ul>
+          <li><strong>Inizia con soli €250 </strong> sul conto per provare l’AI</li>
+          <li>Guida passo-passo dal manager </li>
+          <li>Inizia ora</li>
+        </ul>
+
+        <div style="margin-top:12px">
+          <a class="btn" href="form.html">ATTIVA IL MIO CONTO ORA</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('ctaPrimary').addEventListener('click', function(){
+      try { localStorage.setItem('landing_source','demo250'); } catch(e){}
+    });
+  </script>
+</body>
+</html>
