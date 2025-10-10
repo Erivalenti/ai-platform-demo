@@ -1,4 +1,4 @@
-// ✅ app.js — стабільна версія без import, сумісна з Vercel
+// ✅ app.js — стабільна версія для Vercel
 console.log("✅ App script loaded.");
 
 // === Ініціалізація Supabase з window.__env ===
@@ -106,19 +106,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
       userData = {
         first_name: document.getElementById("firstName").value,
-  last_name: document.getElementById("lastName").value,
-  email: document.getElementById("email").value,
-  prefix: document.getElementById("prefix").value,
-  phone: phoneValue,
-  goal: null,
-  experience: null,
-  date: new Date().toLocaleString(),
+        last_name: document.getElementById("lastName").value,
+        email: document.getElementById("email").value,
+        prefix: document.getElementById("prefix").value,
+        phone: phoneValue,
+        goal: null,
+        experience: null,
+        date: new Date().toLocaleString(),
       };
 
       form.style.display = "none";
       survey.classList.add("active");
     });
 
+    // ✅ Оновлено: збереження email і редірект на success.html
     surveyBtn.addEventListener("click", async () => {
       if (!goal.value || !experience.value) {
         alert("Seleziona tutte le opzioni!");
@@ -131,17 +132,17 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const { error } = await supabase.from("users").insert([userData]);
         if (error) throw error;
+
+        // зберігаємо email користувача
+        localStorage.setItem("registeredEmail", userData.email);
+
+        // переходимо на success.html
+        window.location.href = "success.html";
       } catch (err) {
         console.error("❌ Supabase error:", err);
         alert("Errore durante il salvataggio. Riprova.");
         return;
       }
-
-      survey.classList.remove("active");
-      showStep(0);
-      setTimeout(() => showStep(1), 2000);
-      setTimeout(() => showStep(2), 4000);
-      setTimeout(() => showStep(3), 6000);
     });
   }
 
