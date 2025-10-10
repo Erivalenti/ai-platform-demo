@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel - Walton Market</title>
 
-  <!-- 🔹 Іконка вкладки для адмінки -->
+  <!-- 🔹 Іконка вкладки -->
   <link rel="icon" type="image/jpeg" href="https://as1.ftcdn.net/jpg/00/07/32/48/1000_F_7324855_mx4CEBWTr81XLOrlQccCROtP2uNR7xbk.jpg">
 
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
 <body>
 
 <header>
-  <img src="https://back.wltnmarket.com/storage/images/logo/dark.png?0.609100662293576" alt="Walton Market Logo">
+  <img src="https://back.wltnmarket.com/storage/images/logo/dark.png" alt="Walton Market Logo">
   <h1>Admin Panel</h1>
 </header>
 
@@ -29,6 +29,11 @@
 
 <!-- 📋 Users table -->
 <div id="adminTable" style="display:none;">
+  <div class="toolbar">
+    <input type="text" id="searchInput" placeholder="🔍 Cerca per email...">
+    <button id="refreshBtn">🔄 Aggiorna</button>
+  </div>
+
   <table>
     <thead>
       <tr>
@@ -55,74 +60,93 @@
 <script src="js/env.js"></script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', async () => {
-    console.log("Admin panel loaded");
+document.addEventListener('DOMContentLoaded', async () => {
+  console.log("Admin panel loaded");
 
-    const ADMIN_LOGIN = "admin138";
-    const ADMIN_PASSWORD = "admin2025";
+  const ADMIN_LOGIN = "admin138";
+  const ADMIN_PASSWORD = "admin2025";
 
-    if (!window.__env) {
-      console.error("window.__env not found. Please create js/env.js");
+  if (!window.__env) {
+    console.error("window.__env not found. Please create js/env.js");
+    return;
+  }
+
+  const supabaseUrl = window.__env.SUPABASE_URL;
+  const supabaseAnonKey = window.__env.SUPABASE_ANON_KEY;
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+  const loginForm = document.getElementById("loginForm");
+  const loginDiv = document.getElementById("loginDiv");
+  const adminTable = document.getElementById("adminTable");
+  const userTable = document.getElementById("userTable");
+  const searchInput = document.getElementById("searchInput");
+  const refreshBtn = document.getElementById("refreshBtn");
+
+  // 🔐 Login
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const login = document.getElementById("login").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (login === ADMIN_LOGIN && password === ADMIN_PASSWORD) {
+      loginDiv.style.display = "none";
+      adminTable.style.display = "block";
+      await loadUsers();
+      setInterval(loadUsers, 30000); // автооновлення кожні 30 сек
+    } else {
+      alert("❌ Invalid login or password!");
+    }
+  });
+
+  // 🔁 Кнопка оновлення
+  refreshBtn.addEventListener("click", loadUsers);
+
+  // 🔍 Пошук по email
+  searchInput.addEventListener("input", () => {
+    const filter = searchInput.value.toLowerCase();
+    const rows = userTable.querySelectorAll("tr");
+    rows.forEach(row => {
+      const email = row.cells[2]?.textContent.toLowerCase() || "";
+      row.style.display = email.includes(filter) ? "" : "none";
+    });
+  });
+
+  // 📦 Завантаження користувачів
+  async function loadUsers() {
+    userTable.innerHTML = "<tr><td colspan='10'>Caricamento...</td></tr>";
+
+    const { data: users, error } = await supabase.from("users").select("*");
+
+    if (error) {
+      console.error("Supabase error:", error);
+      userTable.innerHTML = `<tr><td colspan="10" style="text-align:center;">Error loading users</td></tr>`;
       return;
     }
 
-    const supabaseUrl = window.__env.SUPABASE_URL;
-    const supabaseAnonKey = window.__env.SUPABASE_ANON_KEY;
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
-
-    const loginForm = document.getElementById("loginForm");
-    const loginDiv = document.getElementById("loginDiv");
-    const adminTable = document.getElementById("adminTable");
-    const userTable = document.getElementById("userTable");
-
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const login = document.getElementById("login").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      if (login === ADMIN_LOGIN && password === ADMIN_PASSWORD) {
-        loginDiv.style.display = "none";
-        adminTable.style.display = "block";
-        await loadUsers();
-      } else {
-        alert("❌ Invalid login or password!");
-      }
-    });
-
-    async function loadUsers() {
-      userTable.innerHTML = "";
-
-      const { data: users, error } = await supabase.from("users").select("*");
-
-      if (error) {
-        console.error("Supabase error:", error);
-        userTable.innerHTML = `<tr><td colspan="10" style="text-align:center;">Error loading users</td></tr>`;
-        return;
-      }
-
-      if (!users || users.length === 0) {
-        userTable.innerHTML = `<tr><td colspan="10" style="text-align:center;">No users found</td></tr>`;
-        return;
-      }
-
-      users.forEach((user) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${user.first_name || ""}</td>
-          <td>${user.last_name || ""}</td>
-          <td>${user.email || ""}</td>
-          <td>${user.prefix || ""}</td>
-          <td>${user.phone || ""}</td>
-          <td>${user.goal || ""}</td>
-          <td>${user.experience || ""}</td>
-          <td>${user.salary || ""}</td>
-          <td>${user.deposit || ""}</td>
-          <td>${user.date || ""}</td>
-        `;
-        userTable.appendChild(tr);
-      });
+    if (!users || users.length === 0) {
+      userTable.innerHTML = `<tr><td colspan="10" style="text-align:center;">Nessun utente trovato</td></tr>`;
+      return;
     }
-  });
+
+    userTable.innerHTML = "";
+    users.forEach((user) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${user.first_name || ""}</td>
+        <td>${user.last_name || ""}</td>
+        <td>${user.email || ""}</td>
+        <td>${user.prefix || ""}</td>
+        <td>${user.phone || ""}</td>
+        <td>${user.goal || ""}</td>
+        <td>${user.experience || ""}</td>
+        <td>${user.salary || ""}</td>
+        <td>${user.deposit || ""}</td>
+        <td>${user.date || ""}</td>
+      `;
+      userTable.appendChild(tr);
+    });
+  }
+});
 </script>
 
 </body>
