@@ -80,6 +80,22 @@
       <strong>Whatsapp:</strong> +34 676 70 61 00<br>
       <strong>Email:</strong> erica.valenti@waltonmarketltd.email
     </div>
+    <button class="btn" id="continueBtn">Continua</button>
+  </div>
+
+  <!-- 🔹 Новий фінальний екран -->
+  <div class="step" id="step5">
+    <div class="card" style="text-align:center;">
+      <h2>✅ Registrazione completata!</h2>
+      <p>I tuoi dati di accesso:</p>
+      <p><strong>Login:</strong> <span id="finalEmail"></span></p>
+      <p><strong>Password:</strong> v4KLi9YgHt</p>
+      <p class="note">L’accesso sarà attivato solo dopo il contatto con il tuo manager.</p>
+
+      <button class="btn" id="accessBtn" style="margin-top:20px;">
+        Accedi al tuo account
+      </button>
+    </div>
   </div>
 </div>
 
@@ -177,9 +193,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // 🔹 Анімація кроків
     survey.classList.remove('active');
     showStep(0);
-    setTimeout(() => showStep(1), 2000);
+       setTimeout(() => showStep(1), 2000);
     setTimeout(() => showStep(2), 4000);
     setTimeout(() => showStep(3), 6000);
+  });
+
+  // 🔹 Кнопка "Accedi" -> відкриває дашборд
+  document.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'accessBtn') {
+      window.open('https://dashboard.waltonmarketltd.com', '_blank');
+    }
   });
 });
 </script>
