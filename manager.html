@@ -5,6 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manager</title>
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .continue-btn {
+      background: #0d6efd;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: 0.3s;
+    }
+    .continue-btn:hover {
+      background: #0b5ed7;
+    }
+  </style>
 </head>
 <body>
   <div class="spinner"></div>
@@ -16,10 +32,15 @@
     <p>Il tuo manager ti contatterà a breve.</p>
     <p>📧 Email: <strong>erica.valenti@waltonmarketltd.email</strong></p>
     <p>💬 WhatsApp: <a href="https://wa.me/34676706100" target="_blank">+34 676 70 61 00</a></p>
+
+    <!-- ✅ Кнопка продовження -->
+    <div style="text-align:center;">
+      <button id="continueBtn" class="continue-btn">Continua</button>
+    </div>
   </div>
 
   <script>
-    // Анімація завантаження та показ менеджера
+    // === Анімація завантаження та показ менеджера ===
     setTimeout(() => {
       document.querySelector('.spinner').style.display = 'none';
       document.querySelector('.success').style.display = 'block';
@@ -29,6 +50,18 @@
         document.querySelector('.manager-info').style.display = 'block';
       }, 2000);
     }, 3000);
+
+    // === Перехід на success.html ===
+    document.addEventListener('DOMContentLoaded', () => {
+      const continueBtn = document.getElementById('continueBtn');
+      if (continueBtn) {
+        continueBtn.addEventListener('click', () => {
+          const email = localStorage.getItem('registeredEmail');
+          console.log("✅ Redirecting to success page. Email:", email);
+          window.location.href = "success.html";
+        });
+      }
+    });
   </script>
 </body>
 </html>
